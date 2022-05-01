@@ -15,23 +15,15 @@ class CartController extends Controller
      */
     public function index()
     {
-
-//       return  $cart = Cart::Join('orders','orders.cart_id','=','carts.id')
-//            ->join('products','products.id','=','orders.product_id')
-//            ->select('orders.cart_id as cart_id','orders.id as order_id','carts.amount as total_cart_price','carts.time as total_cart_time','products.name','products.price','products.time')
-//            ->orderby('orders.cart_id')
-//            ->get();
-
-         $carts = Cart::with('order')->get();
+        $carts = Cart::with('order')->get();
         return  $carts;
- // $orders = Order::all();
-
-     // return $carts->order;
-
-
-//  $cart1 = Cart::find(1);
-//  return $carts ;
     }
+    public function index2($customer_id)
+    {
+        $carts = Cart::with('order')->where('customer_id','=',$customer_id)->get();
+        return  $carts;
+    }
+
 
     /**
      * Show the form for creating a new resource.

@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 //});
 //basicAuth
 //auth:sanctum
-Route::middleware(['basicAuth'])->group(function (){
+Route::middleware(['auth:sanctum'])->group(function (){
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -27,14 +27,16 @@ Route::middleware(['basicAuth'])->group(function (){
     Route::get('/productView',[\App\Http\Controllers\ProductController::class , 'index']);//u
     Route::post('/productStore',[\App\Http\Controllers\ProductController::class , 'store']);//u
     Route::put('/productEdit/{id}',[\App\Http\Controllers\ProductController::class , 'update']);//u
+    Route::delete('/productDelete/{id}',[\App\Http\Controllers\ProductController::class , 'destroy']);//u
     Route::get('/typeView',[\App\Http\Controllers\TypeController::class , 'index']);//u
     Route::post('/typeStore',[\App\Http\Controllers\TypeController::class , 'store']);//u
     Route::put('/typeEdit/{id}',[\App\Http\Controllers\TypeController::class , 'update']);//u
+    Route::delete('/typeDelete/{id}',[\App\Http\Controllers\TypeController::class , 'destroy']);//u
     Route::get('/customerView',[\App\Http\Controllers\CustomerController::class , 'index']);//u
     Route::get('/rateView',[\App\Http\Controllers\RateController::class , 'index']);//u
     Route::get('/feedbackView',[\App\Http\Controllers\FeedbackController::class , 'index']);//u
 });
-//Route::post('/customerStore',[\App\Http\Controllers\CustomerController::class , 'Store']);//c
+    Route::post('/customerStore',[\App\Http\Controllers\CustomerController::class , 'Store']);//c
 //Route::post('/orderStore',[\App\Http\Controllers\OrderController::class , 'Store']);//c
-//Route::get('/orderCustomerView',[\App\Http\Controllers\CartController::class , 'index2']);//c
+    Route::get('/orderCustomerView/{customer_id}',[\App\Http\Controllers\CartController::class , 'index2']);//c
 //Route::get('/random5',[\App\Http\Controllers\CartController::class , 'random5']);//c
