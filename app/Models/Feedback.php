@@ -12,6 +12,6 @@ class Feedback extends Model
     use HasFactory;
     public function customer()
     {
-        return $this->hasOne(Customer::class,'customer_id');
+        return $this->belongsTo(Customer::class,'customer_id');
     }
 }

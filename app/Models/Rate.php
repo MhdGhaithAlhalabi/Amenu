@@ -12,10 +12,10 @@ class Rate extends Model
     use HasFactory;
     public function product()
     {
-        return $this->hasOne(Product::class,'product_id');
+        return $this->belongsTo(Product::class,'product_id');
     }
     public function customer()
     {
-        return $this->hasOne(Customer::class,'customer_id');
+        return $this->belongsTo(Customer::class,'customer_id');
     }
 }

@@ -21,6 +21,6 @@ class Product extends Model
     }
     public function type()
     {
-    return $this->hasOne(Type::class,'type_id');
+    return $this->belongsTo(Type::class,'type_id');
     }
 }

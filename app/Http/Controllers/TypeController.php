@@ -15,7 +15,10 @@ class TypeController extends Controller
      */
     public function index()
     {
-        //
+         $type =Type::all();
+         // $type = json_encode($type);
+        return $type;
+
     }
 
     /**

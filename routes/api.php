@@ -18,15 +18,19 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 //basicAuth
-Route::middleware(['auth:sanctum'])->group(function (){
+//auth:sanctum
+Route::middleware(['basicAuth'])->group(function (){
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-   // Route::get('/cartView',[\App\Http\Controllers\CartController::class , 'index']);//u
+    Route::get('/cartView',[\App\Http\Controllers\CartController::class , 'index']);//u
     Route::get('/productView',[\App\Http\Controllers\ProductController::class , 'index']);//u
     Route::post('/productStore',[\App\Http\Controllers\ProductController::class , 'store']);//u
+    Route::get('/typeView',[\App\Http\Controllers\TypeController::class , 'index']);//u
     Route::post('/typeStore',[\App\Http\Controllers\TypeController::class , 'store']);//u
-    //Route::get('/customerView',[\App\Http\Controllers\CustomerController::class , 'index']);//u
+    Route::get('/customerView',[\App\Http\Controllers\CustomerController::class , 'index']);//u
+    Route::get('/rateView',[\App\Http\Controllers\RateController::class , 'index']);//u
+    Route::get('/feedbackView',[\App\Http\Controllers\FeedbackController::class , 'index']);//u
 });
 //Route::post('/customerStore',[\App\Http\Controllers\CustomerController::class , 'Store']);//c
 //Route::post('/orderStore',[\App\Http\Controllers\OrderController::class , 'Store']);//c

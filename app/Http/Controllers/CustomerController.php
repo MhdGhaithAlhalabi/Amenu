@@ -14,7 +14,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        $customer =  Customer::all();
+        return $customer;
     }
 
     /**
