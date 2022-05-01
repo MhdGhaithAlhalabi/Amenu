@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 //});
 //basicAuth
 //auth:sanctum
-Route::middleware(['basicAuth'])->group(function (){
+Route::middleware(['auth:sanctum'])->group(function (){
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
