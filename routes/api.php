@@ -19,14 +19,14 @@ use Illuminate\Support\Facades\Route;
 //});
 //basicAuth
 //auth:sanctum
-Route::middleware(['auth:sanctum'])->group(function (){
+Route::middleware(['basicAuth'])->group(function (){
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
     Route::get('/cartView',[\App\Http\Controllers\CartController::class , 'index']);//u
     Route::get('/productView',[\App\Http\Controllers\ProductController::class , 'index']);//u
     Route::post('/productStore',[\App\Http\Controllers\ProductController::class , 'store']);//u
-    Route::put('/productEdit/{id}',[\App\Http\Controllers\ProductController::class , 'update']);//u
+    Route::post('/productEdit/{id}',[\App\Http\Controllers\ProductController::class , 'update']);//u
     Route::delete('/productDelete/{id}',[\App\Http\Controllers\ProductController::class , 'destroy']);//u
     Route::get('/typeView',[\App\Http\Controllers\TypeController::class , 'index']);//u
     Route::post('/typeStore',[\App\Http\Controllers\TypeController::class , 'store']);//u
