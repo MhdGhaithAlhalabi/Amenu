@@ -83,9 +83,22 @@ class TypeController extends Controller
      * @param  \App\Models\Type  $type
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Type $type)
+    public function update(Request $request, $id)
     {
-        //
+       $type = Type::find($id);
+        $validator = Validator::make($request->all(),[
+            'name' => ['required', 'string', 'max:255','unique:types'],
+        ]);
+
+        if ($validator->fails()) {
+            return json_encode($validator->getMessageBag());
+        }
+
+             $name = $request->name;
+             $type->name = $name;
+             $type->save();
+
+        return json_encode('Type edited');
     }
 
     /**

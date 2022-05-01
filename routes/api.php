@@ -26,8 +26,10 @@ Route::middleware(['basicAuth'])->group(function (){
     Route::get('/cartView',[\App\Http\Controllers\CartController::class , 'index']);//u
     Route::get('/productView',[\App\Http\Controllers\ProductController::class , 'index']);//u
     Route::post('/productStore',[\App\Http\Controllers\ProductController::class , 'store']);//u
+    Route::put('/productEdit/{id}',[\App\Http\Controllers\ProductController::class , 'update']);//u
     Route::get('/typeView',[\App\Http\Controllers\TypeController::class , 'index']);//u
     Route::post('/typeStore',[\App\Http\Controllers\TypeController::class , 'store']);//u
+    Route::put('/typeEdit/{id}',[\App\Http\Controllers\TypeController::class , 'update']);//u
     Route::get('/customerView',[\App\Http\Controllers\CustomerController::class , 'index']);//u
     Route::get('/rateView',[\App\Http\Controllers\RateController::class , 'index']);//u
     Route::get('/feedbackView',[\App\Http\Controllers\FeedbackController::class , 'index']);//u
