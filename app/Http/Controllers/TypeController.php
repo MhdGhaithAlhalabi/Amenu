@@ -11,7 +11,7 @@ class TypeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function index()
     {
@@ -35,7 +35,7 @@ class TypeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return false|string
      */
     public function store(Request $request)
     {
@@ -81,7 +81,7 @@ class TypeController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Type  $type
-     * @return \Illuminate\Http\Response
+     * @return false|string
      */
     public function update(Request $request, $id)
     {

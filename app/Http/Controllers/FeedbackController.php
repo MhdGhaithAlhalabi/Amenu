@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Feedback;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class FeedbackController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function index()
     {
@@ -32,11 +33,25 @@ class FeedbackController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return false|\Illuminate\Http\Response|string
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'message' => ['required'],
+            'customer_id' => ['required']
+        ]);
+
+        if ($validator->fails()) {
+            return json_encode($validator->getMessageBag());
+        }
+
+        $product = Feedback::create([
+            'message' => $request->message,
+            'customer_id' => $request->customer_id
+        ]);
+
+        return json_encode('Feedback stored');
     }
 
     /**
