@@ -25,7 +25,7 @@ Route::middleware(['auth:sanctum'])->group(function (){
     });
     Route::get('/cartView',[\App\Http\Controllers\CartController::class , 'index']);//react
     Route::get('/productView',[\App\Http\Controllers\ProductController::class , 'index']);//react
-    Route::post('/productStore',[\App\Http\Controllers\ProductController::class , 'store']);//react
+    Route::post('/productStore',[\App\Http\Controllers\ProductController::class , 'store']);//react // لازم عدل الصورة لنص كبير بالهيروكو
     Route::post('/productEdit/{id}',[\App\Http\Controllers\ProductController::class , 'update']);//react
     Route::delete('/productDelete/{id}',[\App\Http\Controllers\ProductController::class , 'destroy']);//react
     Route::get('/typeView',[\App\Http\Controllers\TypeController::class , 'index']);//react
