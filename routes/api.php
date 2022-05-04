@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 //});
 //basicAuth
 //auth:sanctum
-header("Access-Control-Allow-Origin: *");
+//header("Access-Control-Allow-Origin: *");
 Route::middleware(['auth:sanctum'])->group(function (){
     Route::get('/user', function (Request $request) {
         return $request->user();
