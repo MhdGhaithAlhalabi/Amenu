@@ -25,7 +25,7 @@ Route::middleware(['auth:sanctum'])->group(function (){
     });
     Route::get('/cartView',[\App\Http\Controllers\CartController::class , 'index']);//react
     Route::get('/productView',[\App\Http\Controllers\ProductController::class , 'index']);//react
-    Route::post('/productStore',[\App\Http\Controllers\ProductController::class , 'store']);//react // لازم عدل الصورة لنص كبير بالهيروكو
+    Route::post('/productStore',[\App\Http\Controllers\ProductController::class , 'store']);//react
     Route::post('/productEdit/{id}',[\App\Http\Controllers\ProductController::class , 'update']);//react
     Route::delete('/productDelete/{id}',[\App\Http\Controllers\ProductController::class , 'destroy']);//react
     Route::get('/typeView',[\App\Http\Controllers\TypeController::class , 'index']);//react
@@ -34,13 +34,16 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::delete('/typeDelete/{id}',[\App\Http\Controllers\TypeController::class , 'destroy']);//react
     Route::get('/customerView',[\App\Http\Controllers\CustomerController::class , 'index']);//react
     Route::get('/rateView',[\App\Http\Controllers\RateController::class , 'index']);//react
+    Route::get('/rateCustomView/{id}',[\App\Http\Controllers\RateController::class , 'show']);//flutter
     Route::get('/feedbackView',[\App\Http\Controllers\FeedbackController::class , 'index']);//react
 });
     Route::post('/customerStore',[\App\Http\Controllers\CustomerController::class , 'Store']);//flutter
     Route::post('/orderStore',[\App\Http\Controllers\OrderController::class , 'Store']);//flutter
-
-//Route::post('/orderStore',[\App\Http\Controllers\OrderController::class , 'Store']);//flutter
     Route::get('/orderCustomerView/{customer_id}',[\App\Http\Controllers\CartController::class , 'index2']);//flutter
-//Route::get('/random5',[\App\Http\Controllers\CartController::class , 'random5']);//flutter
     Route::post('/feedbackStore',[\App\Http\Controllers\FeedbackController::class , 'store']);//flutter
+    Route::get('/rateView/{id}',[\App\Http\Controllers\RateController::class , 'show']);//flutter
+    Route::post('/rateStore',[\App\Http\Controllers\RateController::class , 'store']);//flutter
+
+
+//Route::get('/random5',[\App\Http\Controllers\CartController::class , 'random5']);//flutter
 

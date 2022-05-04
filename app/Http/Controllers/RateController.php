@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Rate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class RateController extends Controller
 {
@@ -32,11 +33,28 @@ class RateController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return false|string
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'rate' => ['required', 'Integer','max:5','min:1'],
+            'customer_id' => ['required'],
+            'product_id' => ['required'],
+
+        ]);
+
+        if ($validator->fails()) {
+            return json_encode($validator->getMessageBag());
+        }
+
+        $product = Rate::create([
+            'rate' => $request->rate,
+            'customer_id' => $request->customer_id,
+            'product_id' => $request->product_id
+        ]);
+
+        return json_encode('Rate stored');
     }
 
     /**
@@ -45,9 +63,10 @@ class RateController extends Controller
      * @param  \App\Models\Rate  $rate
      * @return \Illuminate\Http\Response
      */
-    public function show(Rate $rate)
+    public function show($id)
     {
-        //
+       $rate = Rate::all()->where('product_id','=',$id)->average('rate');
+       return $rate;
     }
 
     /**
