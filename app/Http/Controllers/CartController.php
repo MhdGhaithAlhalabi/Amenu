@@ -15,7 +15,13 @@ class CartController extends Controller
      */
     public function index()
     {
-        $carts = Cart::with('order')->get();
+//        $carts = Cart::with('order')->join('orders','orders.cart_id','=','carts.id')
+//            ->join('products','products.id','orders.product_id')
+//            ->orderBy('carts.id')
+//            ->get();
+       //  $carts = Order::with('cart','product')->get();
+        $carts = Cart::with('order.product' ,'customer')->get();
+
         return  $carts;
     }
     public function index2($customer_id)

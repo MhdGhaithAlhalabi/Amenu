@@ -37,6 +37,8 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::get('/feedbackView',[\App\Http\Controllers\FeedbackController::class , 'index']);//react
 });
     Route::post('/customerStore',[\App\Http\Controllers\CustomerController::class , 'Store']);//flutter
+    Route::post('/orderStore',[\App\Http\Controllers\OrderController::class , 'Store']);//flutter
+
 //Route::post('/orderStore',[\App\Http\Controllers\OrderController::class , 'Store']);//flutter
     Route::get('/orderCustomerView/{customer_id}',[\App\Http\Controllers\CartController::class , 'index2']);//flutter
 //Route::get('/random5',[\App\Http\Controllers\CartController::class , 'random5']);//flutter
