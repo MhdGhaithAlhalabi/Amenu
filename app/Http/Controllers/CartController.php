@@ -44,7 +44,7 @@ class CartController extends Controller
             ->where('carts.customer_id', $customer_id)->get();
 
              $BrandCollection = collect($cart)->countBy('id')->sortDesc();
-        return  $BrandCollection->keys();
+        return  $BrandCollection->keys()->first();
        // Product::all()->where('id','=','')
 
     }
