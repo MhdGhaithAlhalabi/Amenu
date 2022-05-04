@@ -26,7 +26,7 @@ class CartController extends Controller
     }
     public function index2($customer_id)
     {
-        $carts = Cart::with('order')->where('customer_id','=',$customer_id)->get();
+        $carts = Cart::with('order.product')->where('customer_id','=',$customer_id)->get();
         return  $carts;
     }
 
