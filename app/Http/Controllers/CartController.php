@@ -43,8 +43,11 @@ class CartController extends Controller
              ->select('types.id')
             ->where('carts.customer_id', $customer_id)->get();
 
-             $BrandCollection = collect($cart)->countBy('id')->sortDesc();
-        return  $BrandCollection->keys()->first();
+             $Collection1 = collect($cart)->countBy('id')->sortDesc();
+         $Collection2 = $Collection1->keys()->first();
+          $c = $Collection2;
+      $product =  Product::with('type')->where('type_id','=',$c)->inRandomOrder()->limit(5)->get();
+        return   $product;
        // Product::all()->where('id','=','')
 
     }
