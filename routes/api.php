@@ -38,11 +38,11 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::get('/rateCustomView/{id}',[\App\Http\Controllers\RateController::class , 'show']);//react
     Route::get('/feedbackView',[\App\Http\Controllers\FeedbackController::class , 'index']);//react
 });
-    Route::post('/customerStore',[\App\Http\Controllers\CustomerController::class , 'Store']);//flutter
-    Route::post('/orderStore',[\App\Http\Controllers\OrderController::class , 'Store']);//flutter
-    Route::get('/orderCustomerView/{customer_id}',[\App\Http\Controllers\CartController::class , 'index2']);//flutter
-    Route::post('/feedbackStore',[\App\Http\Controllers\FeedbackController::class , 'store']);//flutter
-    Route::get('/rateView/{id}',[\App\Http\Controllers\RateController::class , 'show']);//flutter
-    Route::post('/rateStore',[\App\Http\Controllers\RateController::class , 'store']);//flutter
-    Route::get('/random5/{customer_id}',[\App\Http\Controllers\CartController::class , 'random5']);//flutter
+Route::post('/customerStore',[\App\Http\Controllers\CustomerController::class , 'Store']);//flutter
+Route::post('/orderStore',[\App\Http\Controllers\OrderController::class , 'Store']);//flutter
+Route::get('/orderCustomerView/{customer_id}',[\App\Http\Controllers\CartController::class , 'index2']);//flutter
+Route::post('/feedbackStore',[\App\Http\Controllers\FeedbackController::class , 'store']);//flutter
+Route::get('/rateView/{id}',[\App\Http\Controllers\RateController::class , 'show']);//flutter
+Route::post('/rateStore',[\App\Http\Controllers\RateController::class , 'store']);//flutter
+Route::get('/random5/{customer_id}',[\App\Http\Controllers\CartController::class , 'random5']);//flutter
 
