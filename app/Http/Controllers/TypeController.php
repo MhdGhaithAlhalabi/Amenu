@@ -15,7 +15,7 @@ class TypeController extends Controller
      */
     public function index()
     {
-         $type =Type::with('product')->all();
+         $type =Type::with('product')->get();
          // $type = json_encode($type);
         return $type;
 
