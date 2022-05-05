@@ -15,9 +15,6 @@ class VerifyCsrfToken extends Middleware
         'api/*',
         'login/',
         'logout/',
-        'api/user/',
-        'dashboard/',
-        'sanctum/csrf-cookie/'
 
     ];
 }
