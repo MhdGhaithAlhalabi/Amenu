@@ -39,7 +39,7 @@ class RateController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'rate' => ['required','double','max:5.0','min:1.0'],
+            'rate' => ['required','max:5.0','min:1.0'],
             'customer_id' => ['required'],
             'product_id' => ['required'],
 
