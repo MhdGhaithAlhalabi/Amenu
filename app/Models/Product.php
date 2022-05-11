@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $table= 'products';
-    protected $fillable =['type_id','name','price','time','details','image','priceSale','status'];
+    protected $fillable =['type_id','name','price','time','details','rate','image','priceSale','status'];
    // protected $nullable = ['details','image','priceSale','status'];
     use HasFactory;
     public function rate()

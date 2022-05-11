@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Rate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -47,14 +48,28 @@ class RateController extends Controller
         if ($validator->fails()) {
             return json_encode($validator->getMessageBag());
         }
+        $r=Rate::where('customer_id','=',$request->customer_id)->where('product_id','=',$request->product_id)->first();
 
+        if($r == NULL)
+        {
         $product = Rate::create([
             'rate' => $request->rate,
             'customer_id' => $request->customer_id,
             'product_id' => $request->product_id
         ]);
-
+        }
+        else{
+             $this_rate = Rate::find($r->id);
+             $this_rate->rate=$request->rate;
+             $this_rate->save();
+        }
+        $the_rate = Rate::all()->where('product_id','=',$request->product_id)->average('rate');
+        $product = Product::find($request->product_id);
+        $rate = $the_rate;
+        $product->rate = $rate;
+        $product->save();
         return json_encode('Rate stored');
+
     }
 
     /**
