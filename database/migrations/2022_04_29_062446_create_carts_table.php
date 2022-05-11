@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('customer_id');
             $table->float('amount');
             $table->integer('time');
+            $table->double('status')->nullable();
+            $table->integer('table_number')->nullable();
             $table->timestamps();
         });
     }

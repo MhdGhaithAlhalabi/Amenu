@@ -18,11 +18,12 @@ return new class extends Migration
             $table->foreignId('type_id');
             $table->string('name');
             $table->longText('details')->nullable();
-            $table->string('image')->nullable();
+            $table->longText('image')->nullable();
             $table->float('price');
             $table->float('priceSale')->nullable();
             $table->string('status')->nullable();
             $table->integer('time');
+            $table->double('rate')->nullable();
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('rates', function (Blueprint $table) {
             $table->id();
-            $table->integer('rate');
+            $table->double('rate');
             $table->foreignId('product_id');
             $table->foreignId('customer_id');
             $table->timestamps();

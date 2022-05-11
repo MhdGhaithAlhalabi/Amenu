@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('product_id');
             $table->foreignId('cart_id');
             $table->integer('qtu');
+            $table->text('message')->nullable();
             $table->timestamps();
         });
     }
