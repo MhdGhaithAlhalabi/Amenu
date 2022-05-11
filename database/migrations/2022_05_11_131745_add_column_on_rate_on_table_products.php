@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->text('rate')->after('details')->nullable();
+            $table->double('rate')->after('details')->nullable();
 
         });
     }
