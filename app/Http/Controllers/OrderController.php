@@ -47,12 +47,18 @@ class OrderController extends Controller
             $c_price = 0;
             $c_time =0;
             for($i=0;$i<$collection->count();$i++) {
-                $p = $collection[$i]['product_id'];
-                $p2 = Product::find($p)->price;
-                $t = Product::find($p)->time;
-                $q = $collection[$i]['qtu'];
-                $c_price = $c_price + $p2 * $q;
-                $c_time = $c_time + $t * $q;
+                $product_id = $collection[$i]['product_id'];
+                $price = Product::find($product_id)->price;
+                $priceSale = Product::find($product_id)->priceSale;
+                $time = Product::find($product_id)->time;
+                $qtu = $collection[$i]['qtu'];
+                if($priceSale == NULL){
+                    $c_price = $c_price + $price * $qtu;
+                }
+                else{
+                    $c_price = $c_price + $priceSale * $qtu;
+                }
+                $c_time = $c_time + $time * $qtu;
             }
             $customer_id = $order['customer_id'];
             $amount = $c_price;
