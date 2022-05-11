@@ -80,6 +80,7 @@ class ProductController extends Controller
             'priceSale' => $request->priceSale,
             'status' => $request->status,
             'time' => $request->time,
+            'rate' => 5,
         ]);
 
         return json_encode('product stored');
