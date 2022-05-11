@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('carts', function (Blueprint $table) {
-            $table->text('status')->after('time')->nullable();
-            $table->text('table_number')->after('time')->nullable();
+            $table->double('status')->after('time')->nullable();
+            $table->integer('table_number')->after('time')->nullable();
         });
     }
 
