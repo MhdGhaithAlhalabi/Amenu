@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -46,6 +47,7 @@ class OrderController extends Controller
             $collection = collect($orderr);
             $c_price = 0;
             $c_time =0;
+            $temp = 0;
             for($i=0;$i<$collection->count();$i++) {
                 $product_id = $collection[$i]['product_id'];
                 $price = Product::find($product_id)->price;
@@ -71,7 +73,18 @@ class OrderController extends Controller
                 'table_number' => $table_number,
                 'status' => 'waiting'
             ]);
-            $cart_id = DB::table('carts')->select('id')->where('customer_id','=',$customer_id)->orderBy('id','desc')->first()->id;
+            if($amount>100000)
+            {
+                $customer = Customer::find($customer_id);
+                $point = $customer->points + 1;
+                $customer->points = $point;
+                $customer->save();
+            }
+            $cart_id = DB::table('carts')
+                ->select('id')
+                ->where('customer_id','=',$customer_id)
+                ->orderBy('id','desc')
+                ->first()->id;
 
            for($i=0;$i<$collection->count();$i++){
                $p = $collection[$i]['product_id'];
@@ -87,9 +100,16 @@ class OrderController extends Controller
                ]
             );
            }
+           $time_to_eat = Cart::where('status','=','waiting')->sum('time');
+           if($time_to_eat > 60)
+           {
+             $pro =  Product::where('price','<',10000)->get();
+             return [$pro,$time_to_eat ];
+           }
+           else{
 
-            return 'cart order created';
-
+               return $time_to_eat;
+           }
         }
         else return 'error';
     }
