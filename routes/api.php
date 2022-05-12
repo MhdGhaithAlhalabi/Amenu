@@ -37,6 +37,9 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::get('/rateView',[\App\Http\Controllers\RateController::class , 'index']);//react
     Route::get('/rateCustomView/{id}',[\App\Http\Controllers\RateController::class , 'show']);//react
     Route::get('/feedbackView',[\App\Http\Controllers\FeedbackController::class , 'index']);//react
+    Route::get('/dailyReport',[\App\Http\Controllers\CartController::class , 'dailyReport']);//react
+    Route::get('/monthlyReport',[\App\Http\Controllers\CartController::class , 'monthlyReport']);//react
+
 });
 Route::post('/customerStore',[\App\Http\Controllers\CustomerController::class , 'Store']);//flutter
 Route::post('/orderStore',[\App\Http\Controllers\OrderController::class , 'Store']);//flutter

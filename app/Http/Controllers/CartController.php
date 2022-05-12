@@ -18,11 +18,7 @@ class CartController extends Controller
      */
     public function index()
     {
-//        $carts = Cart::with('order')->join('orders','orders.cart_id','=','carts.id')
-//            ->join('products','products.id','orders.product_id')
-//            ->orderBy('carts.id')
-//            ->get();
-       //  $carts = Order::with('cart','product')->get();
+
         $carts = Cart::with('order.product' ,'customer')->get();
 
         return  $carts;
@@ -32,11 +28,22 @@ class CartController extends Controller
         $carts = Cart::with('order.product')->where('customer_id','=',$customer_id)->get();
         return  $carts;
     }
+    public function dailyReport(){
+        $carts = Cart::with('order')
+            ->where('created_at','>' ,now()->subDay())
+            ->get();
+      $total = $carts->sum('amount');
+      return [$carts , $total];
+    }
+    public function monthlyReport(){
+        $carts = Cart::with('order')
+            ->where('created_at','>' ,now()->subMonth())
+            ->get();
+        $total = $carts->sum('amount');
+        return [$carts , $total];
+    }
     public function random5($customer_id)
     {
-//       $product = Type::with('product.order.cart.customer')->where('id','=',$customer_id)->get();
-//       $p = collect('$product');
-//       return $p;
           $cart = Cart::Join('orders','orders.cart_id','=','carts.id')
             ->join('products','products.id','=','orders.product_id')
              ->join('types','types.id','=','products.type_id')
@@ -48,8 +55,6 @@ class CartController extends Controller
           $c = $Collection2;
       $product =  Product::with('type')->where('type_id','=',$c)->inRandomOrder()->limit(5)->get();
         return   $product;
-       // Product::all()->where('id','=','')
-
     }
 
 
