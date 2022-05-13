@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 //basicAuth
 //auth:sanctum
 //header("Access-Control-Allow-Origin: http://localhost:3000");
-Route::middleware(['auth:sanctum'])->group(function (){
+Route::middleware(['auth:user'])->group(function (){
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
