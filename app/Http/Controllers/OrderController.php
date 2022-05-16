@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\orderStore;
 use App\Models\Cart;
 use App\Models\Customer;
 use App\Models\Order;
@@ -73,6 +74,8 @@ class OrderController extends Controller
                 'table_number' => $table_number,
                 'status' => 'waiting'
             ]);
+            $text = 'new order';
+            event(new orderStore($text));
             if($amount>100000)
             {
                 $customer = Customer::find($customer_id);
@@ -110,6 +113,8 @@ class OrderController extends Controller
 
                return $time_to_eat;
            }
+
+
         }
         else return 'error';
     }
