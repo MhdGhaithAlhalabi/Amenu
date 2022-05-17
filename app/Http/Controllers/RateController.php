@@ -46,7 +46,7 @@ class RateController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return json_encode($validator->getMessageBag());
+            return Response()->json($validator->getMessageBag(),400);
         }
         $r=Rate::where('customer_id','=',$request->customer_id)->where('product_id','=',$request->product_id)->first();
 
@@ -68,7 +68,7 @@ class RateController extends Controller
         $rate = $the_rate;
         $product->rate = $rate;
         $product->save();
-        return json_encode('Rate stored');
+        return Response()->json('rate stored', 201);
 
     }
 

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use mysql_xdevapi\Exception;
 
 class ProductController extends Controller
 {
@@ -52,7 +54,7 @@ class ProductController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return json_encode($validator->getMessageBag());
+            return Response()->json($validator->getMessageBag(),400);
         }
         // Handle File Upload
 //        if($request->hasFile('image'))
@@ -83,7 +85,7 @@ class ProductController extends Controller
             'rate' => 5,
         ]);
 
-        return json_encode('product stored');
+        return Response()->json('product stored', 201);
     }
 
     /**
@@ -113,7 +115,7 @@ class ProductController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request,$id)
     {
@@ -129,7 +131,7 @@ class ProductController extends Controller
             'time' => ['required'],
         ]);
         if ($validator->fails()) {
-            return json_encode($validator->getMessageBag());
+            return Response()->json($validator->getMessageBag(),400);
         }
 //        // Handle File Upload
 //        if($request->hasFile('image')){
@@ -170,23 +172,29 @@ class ProductController extends Controller
 //        }
         $product->save();
 
-        return json_encode('product edited');
+        return Response()->json('product edited', 201);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        $product = Product::find($id);
+        try {
+            $product = Product::find($id);
 //        if($product->image != NULL){
 //            // Delete Image
 //            Storage::delete('public/cover_images/'.$product->image);
 //        }
-        $product->delete();
-        return json_encode('Product deleted');
+            $product->delete();
+        }
+        catch (\Exception $e){
+            return Response()->json($e->getMessage(),400);
+        }
+        return Response()->json('product Deleted',201);
+
     }
 }

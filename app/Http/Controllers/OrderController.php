@@ -42,81 +42,84 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->hasFile('order')) {
-            $order = json_decode(file_get_contents($request->file('order')),true);
-            $orderr =  $order['order'];
-            $collection = collect($orderr);
-            $c_price = 0;
-            $c_time =0;
-            $temp = 0;
-            for($i=0;$i<$collection->count();$i++) {
-                $product_id = $collection[$i]['product_id'];
-                $price = Product::find($product_id)->price;
-                $priceSale = Product::find($product_id)->priceSale;
-                $time = Product::find($product_id)->time;
-                $qtu = $collection[$i]['qtu'];
-                if($priceSale == NULL){
-                    $c_price = $c_price + $price * $qtu;
+        try {
+            if ($request->hasFile('order')) {
+                $order = json_decode(file_get_contents($request->file('order')), true);
+                $orderr = $order['order'];
+                $collection = collect($orderr);
+                $c_price = 0;
+                $c_time = 0;
+                $temp = 0;
+                for ($i = 0; $i < $collection->count(); $i++) {
+                    $product_id = $collection[$i]['product_id'];
+                    $price = Product::find($product_id)->price;
+                    $priceSale = Product::find($product_id)->priceSale;
+                    $time = Product::find($product_id)->time;
+                    $qtu = $collection[$i]['qtu'];
+                    if ($priceSale == NULL) {
+                        $c_price = $c_price + $price * $qtu;
+                    } else {
+                        $c_price = $c_price + $priceSale * $qtu;
+                    }
+                    $c_time = $c_time + $time * $qtu;
                 }
-                else{
-                    $c_price = $c_price + $priceSale * $qtu;
+                $customer_id = $order['customer_id'];
+                $amount = $c_price;
+                $time = $c_time;
+                $table_number = $order['table_number'];
+                $cart = Cart::create([
+                    'customer_id' => $customer_id,
+                    'amount' => $amount,
+                    'time' => $time,
+                    'table_number' => $table_number,
+                    'status' => 'waiting'
+                ]);
+                $text = 'new order';
+                event(new orderStore($text));
+                if ($amount > 100000) {
+                    $customer = Customer::find($customer_id);
+                    $point = $customer->points + 1;
+                    $customer->points = $point;
+                    $customer->save();
                 }
-                $c_time = $c_time + $time * $qtu;
+                $cart_id = DB::table('carts')
+                    ->select('id')
+                    ->where('customer_id', '=', $customer_id)
+                    ->orderBy('id', 'desc')
+                    ->first()->id;
+
+                for ($i = 0; $i < $collection->count(); $i++) {
+                    $p = $collection[$i]['product_id'];
+                    $q = $collection[$i]['qtu'];
+                    $m = $collection[$i]['message'];
+
+                    Order::create(
+                        [
+                            'product_id' => $p,
+                            'cart_id' => $cart_id,
+                            'qtu' => $q,
+                            'message' => $m,
+                        ]
+                    );
+                }
+                $time_to_eat = Cart::where('status', '=', 'waiting')->sum('time');
+                if ($time_to_eat > 60) {
+                    $pro = Product::where('price', '<', 3000)->get();
+                    return [$pro, $time_to_eat];
+                } else {
+
+                    return $time_to_eat;
+                }
+
+
             }
-            $customer_id = $order['customer_id'];
-            $amount = $c_price;
-            $time =  $c_time;
-            $table_number = $order['table_number'];
-            $cart = Cart::create([
-                'customer_id' => $customer_id,
-                'amount' => $amount,
-                'time' => $time,
-                'table_number' => $table_number,
-                'status' => 'waiting'
-            ]);
-            $text = 'new order';
-            event(new orderStore($text));
-            if($amount>100000)
-            {
-                $customer = Customer::find($customer_id);
-                $point = $customer->points + 1;
-                $customer->points = $point;
-                $customer->save();
-            }
-            $cart_id = DB::table('carts')
-                ->select('id')
-                ->where('customer_id','=',$customer_id)
-                ->orderBy('id','desc')
-                ->first()->id;
-
-           for($i=0;$i<$collection->count();$i++){
-               $p = $collection[$i]['product_id'];
-                $q = $collection[$i]['qtu'];
-               $m = $collection[$i]['message'];
-
-               Order::create(
-               [
-                    'product_id' => $p,
-                    'cart_id' => $cart_id,
-                   'qtu' => $q,
-                   'message'=> $m,
-               ]
-            );
-           }
-           $time_to_eat = Cart::where('status','=','waiting')->sum('time');
-           if($time_to_eat > 60)
-           {
-             $pro =  Product::where('price','<',10000)->get();
-             return [$pro,$time_to_eat ];
-           }
-           else{
-
-               return $time_to_eat;
-           }
-
-
+            else
+                return Response()->json('order.json file is required',400);
         }
-        else return 'error';
+                catch (\Exception $e){
+                    return Response()->json($e->getMessage(),400);
+                }
+
     }
 
     /**

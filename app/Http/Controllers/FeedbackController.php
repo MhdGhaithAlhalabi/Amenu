@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Feedback;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -43,7 +44,8 @@ class FeedbackController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return json_encode($validator->getMessageBag());
+
+            return Response()-> json($validator->getMessageBag(),400);
         }
 
         $product = Feedback::create([
@@ -51,7 +53,7 @@ class FeedbackController extends Controller
             'customer_id' => $request->customer_id
         ]);
 
-        return json_encode('Feedback stored');
+        return Response()->json('feedback send',201);
     }
 
     /**

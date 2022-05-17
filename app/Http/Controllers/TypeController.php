@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Type;
+use http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -44,14 +45,14 @@ class TypeController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return json_encode($validator->getMessageBag());
+            return Response()->json($validator->getMessageBag(),400);
         }
 
         $product = Type::create([
             'name' => $request->name,
         ]);
 
-        return json_encode('Type stored');
+        return Response()->json('Type stored', 201);
     }
 
     /**
@@ -105,12 +106,17 @@ class TypeController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Type  $type
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
+        try {
         $type = Type::find($id);
         $type->delete();
-        return json_encode('Type deleted');
+    }
+    catch (\Exception $e){
+        return Response()->json($e->getMessage(),400);
+    }
+        return Response()->json('Type Deleted',201);
     }
 }

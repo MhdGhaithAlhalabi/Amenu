@@ -48,7 +48,7 @@ class CustomerController extends Controller
         if ($validator->fails())
         {
 
-            return json_encode($validator->getMessageBag());
+            return Response()-> json($validator->getMessageBag(),400);
         }
         if ($request->points==Null){
             $request->points = 0;
