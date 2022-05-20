@@ -38,8 +38,12 @@ class OrderController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
+    public function testList(Request $request)
+    {
+        return $request->orderlist;
+    }
     public function store(Request $request)
     {
         try {
@@ -72,7 +76,7 @@ class OrderController extends Controller
                     'amount' => $amount,
                     'time' => $time,
                     'table_number' => $table_number,
-                    'status' => 'waiting'
+             +       'status' => 'waiting'
                 ]);
                 $text = 'new order';
                 event(new orderStore($text));

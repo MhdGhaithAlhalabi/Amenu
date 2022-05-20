@@ -43,6 +43,7 @@ Route::middleware(['auth:user'])->group(function (){
 });
 Route::post('/customerStore',[\App\Http\Controllers\CustomerController::class , 'Store']);//flutter
 Route::post('/orderStore',[\App\Http\Controllers\OrderController::class , 'Store']);//flutter
+Route::post('/testlist',[\App\Http\Controllers\OrderController::class , 'testList']);//flutter
 Route::get('/orderCustomerView/{customer_id}',[\App\Http\Controllers\CartController::class , 'index2']);//flutter
 Route::post('/feedbackStore',[\App\Http\Controllers\FeedbackController::class , 'store']);//flutter
 Route::get('/rateView/{id}',[\App\Http\Controllers\RateController::class , 'show']);//flutter
