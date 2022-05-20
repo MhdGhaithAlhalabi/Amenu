@@ -39,11 +39,18 @@ Route::middleware(['auth:user'])->group(function (){
     Route::get('/feedbackView',[\App\Http\Controllers\FeedbackController::class , 'index']);//react
     Route::get('/dailyReport',[\App\Http\Controllers\CartController::class , 'dailyReport']);//react
     Route::get('/monthlyReport',[\App\Http\Controllers\CartController::class , 'monthlyReport']);//react
+    Route::get('/Menu',[\App\Http\Controllers\MenuController::class , 'index']);//react
+    Route::get('/outOfMenu',[\App\Http\Controllers\MenuController::class , 'outOfMenu']);//react
+    Route::post('/menuStore',[\App\Http\Controllers\MenuController::class , 'store']);//react
+    Route::delete('/menuDelete/{id}',[\App\Http\Controllers\MenuController::class , 'destroy']);//react
+
+
+    //inMenu
 
 });
 Route::post('/customerStore',[\App\Http\Controllers\CustomerController::class , 'Store']);//flutter
 Route::post('/orderStore',[\App\Http\Controllers\OrderController::class , 'Store']);//flutter
-Route::post('/testlist',[\App\Http\Controllers\OrderController::class , 'testList']);//flutter
+Route::post('/testList',[\App\Http\Controllers\OrderController::class , 'testList']);//flutter
 Route::get('/orderCustomerView/{customer_id}',[\App\Http\Controllers\CartController::class , 'index2']);//flutter
 Route::post('/feedbackStore',[\App\Http\Controllers\FeedbackController::class , 'store']);//flutter
 Route::get('/rateView/{id}',[\App\Http\Controllers\RateController::class , 'show']);//flutter

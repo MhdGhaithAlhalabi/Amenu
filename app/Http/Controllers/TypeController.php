@@ -92,14 +92,15 @@ class TypeController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return json_encode($validator->getMessageBag());
+            return Response()->json($validator->getMessageBag(),400);
         }
 
              $name = $request->name;
              $type->name = $name;
              $type->save();
 
-        return json_encode('Type edited');
+        return Response()->json('Type edited', 201);
+
     }
 
     /**

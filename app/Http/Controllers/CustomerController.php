@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Menu;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -35,7 +36,7 @@ class CustomerController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function store(Request $request)
     {
@@ -47,34 +48,37 @@ class CustomerController extends Controller
 
         if ($validator->fails())
         {
-
             return Response()-> json($validator->getMessageBag(),400);
         }
-        if ($request->points==Null){
-            $request->points = 0;
-        }
+//        if ($request->points==Null){
+//            $request->points = 0;
+//        }
         $if_phone_exists =DB::table('customers')->select('id')->where('phone',$request->phone)->exists();
         if (! $if_phone_exists)//if phone not exists register
         {
             $customer = Customer::create([
                 'name' => $request->name,
                 'phone' => $request->phone,
-                'points' => $request->points,
+                'points' => 0,
             ]);
-              $menu = Product::all();
-              $customer_id = Customer::all()->where('phone','=',$request->phone)->first()->id;
-              return ['menu'=>$menu,'customer_id'=>$customer_id];
+            //$menu = Product::all();
+            $menu =   Menu::with('product.type')->get();
+            $customer_id = Customer::all()->where('phone','=',$request->phone)->first()->id;
+            $customer_points = Customer::all()->where('phone','=',$request->phone)->first()->points;
+            return ['menu'=>$menu,'customer_id'=>$customer_id,'customer_points'=>$customer_points];
         }
            elseif ($if_phone_exists)//if mac exists
         {
-
-                  $menu = Product::all();
-                  $customer_id = Customer::all()->where('phone','=',$request->phone)->first()->id;
-                  $customer = Customer::find($customer_id);
-                  $points = $request->points;
-                  $customer->points = $points;
-                  $customer->save();
-                  return ['menu'=>$menu,'customer_id'=>$customer_id];
+                  //$menu = Product::all();
+            $menu =   Menu::with('product.type')->get();
+            $customer_id = Customer::all()->where('phone','=',$request->phone)->first()->id;
+//                  $customer = Customer::find($customer_id);
+//                  $points = $request->points;
+//                  $customer->points = $points;
+//                  $customer->save();
+            $customer_points = Customer::all()->where('phone','=',$request->phone)->first()->points;
+            return ['menu'=>$menu,'customer_id'=>$customer_id,'customer_points'=>$customer_points];
+           // return ['menu'=>$menu,'customer_id'=>$customer_id];
         }
     }
 

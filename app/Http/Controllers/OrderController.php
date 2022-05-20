@@ -38,15 +38,19 @@ class OrderController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return false|string
      */
     public function testList(Request $request)
     {
-        return $request->orderlist;
+        $orderList = $request->orderList;
+        return $orderList;
     }
     public function store(Request $request)
     {
         try {
+            //$order =$request->order
+            //$order = json_decode($order, true);
+            //$collection = collect($order);
             if ($request->hasFile('order')) {
                 $order = json_decode(file_get_contents($request->file('order')), true);
                 $orderr = $order['order'];
@@ -56,6 +60,7 @@ class OrderController extends Controller
                 $temp = 0;
                 for ($i = 0; $i < $collection->count(); $i++) {
                     $product_id = $collection[$i]['product_id'];
+                    //$product_id = $collection[$i]['id'];
                     $price = Product::find($product_id)->price;
                     $priceSale = Product::find($product_id)->priceSale;
                     $time = Product::find($product_id)->time;
@@ -68,15 +73,17 @@ class OrderController extends Controller
                     $c_time = $c_time + $time * $qtu;
                 }
                 $customer_id = $order['customer_id'];
+                //$customer_id =$request->customer_id;
                 $amount = $c_price;
                 $time = $c_time;
                 $table_number = $order['table_number'];
+                //$table_number =$request->table_number;
                 $cart = Cart::create([
                     'customer_id' => $customer_id,
                     'amount' => $amount,
                     'time' => $time,
                     'table_number' => $table_number,
-             +       'status' => 'waiting'
+                    'status' => 'waiting'
                 ]);
                 $text = 'new order';
                 event(new orderStore($text));
@@ -94,6 +101,7 @@ class OrderController extends Controller
 
                 for ($i = 0; $i < $collection->count(); $i++) {
                     $p = $collection[$i]['product_id'];
+                    //$p = $collection[$i]['id'];
                     $q = $collection[$i]['qtu'];
                     $m = $collection[$i]['message'];
 
