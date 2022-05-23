@@ -62,7 +62,11 @@ class CustomerController extends Controller
                 'points' => 0,
             ]);
             //$menu = Product::all();
-            $menu =   Menu::with('product.type')->get();
+           // $menu =   Menu::with('product.type')->get();
+         $menu_product_id = Menu::all()->pluck('product_id')->values();
+        $menu =   Product::with('type')
+            ->whereIn('id',$menu_product_id)
+            ->get();
             $customer_id = Customer::all()->where('phone','=',$request->phone)->first()->id;
             $customer_points = Customer::all()->where('phone','=',$request->phone)->first()->points;
             return ['menu'=>$menu,'customer_id'=>$customer_id,'customer_points'=>$customer_points];
@@ -70,7 +74,11 @@ class CustomerController extends Controller
            elseif ($if_phone_exists)//if mac exists
         {
                   //$menu = Product::all();
-            $menu =   Menu::with('product.type')->get();
+         //   $menu =   Menu::with('product.type')->get();
+         $menu_product_id = Menu::all()->pluck('product_id')->values();
+        $menu =   Product::with('type')
+            ->whereIn('id',$menu_product_id)
+            ->get();
             $customer_id = Customer::all()->where('phone','=',$request->phone)->first()->id;
 //                  $customer = Customer::find($customer_id);
 //                  $points = $request->points;
