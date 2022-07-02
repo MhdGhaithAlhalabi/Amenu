@@ -13,7 +13,7 @@ return [
     |
     */
     'defaults' => [
-        'guard' => 'user',
+        'guard' => 'web',
         'passwords' => 'users',
     ],
 //    'defaults' => [
@@ -45,21 +45,25 @@ return [
 //        ],
 //    ],
     'guards' => [
-        'user' => [
+//        'user' => [
+//            'driver' => 'session',
+//            'provider' => 'users',
+//        ],
+//        'admin' => [
+//            'driver' => 'session',
+//            'provider' => 'admins',
+//        ],
+            'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'admin' => [
-            'driver' => 'session',
-            'provider' => 'admins',
-        ],
         'apiUser' => [
-            'driver' => 'token',
+            'driver' => 'session',
             'provider' => 'users',
             'hash' => false,
         ],
         'apiAdmin' => [
-            'driver' => 'token',
+            'driver' => 'session',
             'provider' => 'admins',
             'hash' => false,
         ],

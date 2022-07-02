@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 //basicAuth
 //auth:sanctum
 //header("Access-Control-Allow-Origin: http://localhost:3000");
-Route::middleware(['auth:user'])->group(function (){
+Route::middleware(['auth:sanctum'])->group(function (){
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -39,11 +39,10 @@ Route::middleware(['auth:user'])->group(function (){
     Route::get('/feedbackView',[\App\Http\Controllers\FeedbackController::class , 'index']);//react
     Route::get('/dailyReport',[\App\Http\Controllers\CartController::class , 'dailyReport']);//react
     Route::get('/monthlyReport',[\App\Http\Controllers\CartController::class , 'monthlyReport']);//react
-    Route::get('/Menu',[\App\Http\Controllers\MenuController::class , 'index']);//react
     Route::get('/outOfMenu',[\App\Http\Controllers\MenuController::class , 'outOfMenu']);//react
     Route::post('/menuStore',[\App\Http\Controllers\MenuController::class , 'store']);//react
     Route::delete('/menuDelete/{id}',[\App\Http\Controllers\MenuController::class , 'destroy']);//react
-
+    Route::get('/Menu',[\App\Http\Controllers\MenuController::class , 'index']);//react
 
     //inMenu
 

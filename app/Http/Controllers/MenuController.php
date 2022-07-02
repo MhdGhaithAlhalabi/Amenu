@@ -16,7 +16,11 @@ class MenuController extends Controller
      */
     public function index()
     {
-     $menu =   Menu::with('product.type')->get();
+     //$menu =   Menu::with('product.type')->get();
+        $menu_product_id = Menu::all()->pluck('product_id')->values();
+        $menu = Product::with('type','menu')
+         ->whereIn('id',$menu_product_id)
+            ->get();
      return $menu;
     }
     public function outOfMenu()

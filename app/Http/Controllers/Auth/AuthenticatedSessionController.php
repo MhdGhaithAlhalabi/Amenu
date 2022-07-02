@@ -20,8 +20,13 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        $token= $request->user()->createToken('api_token')->plainTextToken;
 
-        return response()->noContent();
+            return response()->json([
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+            ]);
+        //return response()->noContent();
     }
 
     /**
