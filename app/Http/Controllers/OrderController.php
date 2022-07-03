@@ -97,7 +97,7 @@ $customerId = $request->customerId;
                     'status' => 'waiting'
                 ]);
                 $text = 'new order';
-                event(new orderStore($text));
+                event(new orderStore($text));/////all
                 if ($amount > 100000) {
                     $customer = Customer::find($customer_id);
                     $point = $customer->points + 1;

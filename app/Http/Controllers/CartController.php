@@ -34,6 +34,7 @@ class CartController extends Controller
             ->join('types','types.id','=','products.type_id')
             ->select('types.name','orders.qtu','carts.created_at')
             ->where('carts.created_at','>',now()->subDay())
+            ->orderby('carts.created_at')
             ->get();
         $carts = Cart::where('created_at','>' ,now()->subDay())
             ->get();
