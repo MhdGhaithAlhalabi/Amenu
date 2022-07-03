@@ -49,7 +49,8 @@ class CartController extends Controller
             ->get();
         $carts = Cart::where('created_at','>' ,now()->subMonth())
             ->get();
-       $x= collect($carts1)->groupBy('name');
+       $x= collect($carts1)->groupBy(function ($item) {
+           return $item->date->format('Y-m');});
 
         $total = $carts->sum('amount');
         return ['report'=>$x,'total'=>$total ];
