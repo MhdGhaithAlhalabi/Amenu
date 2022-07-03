@@ -62,7 +62,7 @@ class CartController extends Controller
         }, collect());
 
         $total = $carts->sum('amount');
-        return ['report'=>$xx,'total'=>$total ];
+        return ['report'=>$x,'total'=>$total ];
     }
     public function random5($customer_id)
     {
