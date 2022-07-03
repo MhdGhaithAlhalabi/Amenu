@@ -56,7 +56,6 @@ class CartController extends Controller
         })->reduce(function ($result, $group) {
             return $result->put($group->first()->created_at->format('Y-m-d'), collect([
                 'qty' => $group->count('qtu'),
-                'name' => $group->name,
             ]));
         }, collect());
 
