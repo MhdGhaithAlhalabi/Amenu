@@ -56,8 +56,8 @@ class CartController extends Controller
             return $item->created_at->format('Y-m-d'); // given date is mutated to carbon by eloquent..
         })->reduce(function ($result, $group) {
             return $result->put($group->first()->created_at->format('Y-m-d'), collect([
-                'qty' => $group->count('qtu'),
-                'name' => $group->count('name'),
+                'qty' => $group->sum('qtu'),
+                'name' => $group->name->get(),
             ]));
         }, collect());
 
