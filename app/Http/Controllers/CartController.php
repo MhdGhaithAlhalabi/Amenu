@@ -54,11 +54,10 @@ class CartController extends Controller
        $x= collect($carts1)->groupBy(function ($item) {
            return $item->created_at->format('Y-m-d');});
 
-//      $xx=  DB::table($x)->select(name, count('*'))->
-//->groupBy( 'name', 'created_at');
+        $xx= collect($carts1)->groupBy('name');
 
         $total = $carts->sum('amount');
-        return ['report'=>$carts1,'total'=>$total ];
+        return ['report'=>$x,'r2'=>$xx,'total'=>$total ];
     }
     public function random5($customer_id)
     {
