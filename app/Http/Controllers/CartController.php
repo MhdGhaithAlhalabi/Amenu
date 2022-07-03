@@ -51,7 +51,7 @@ class CartController extends Controller
             ->get();
        $x= collect($carts1)->groupBy(function ($item) {
            return $item->created_at->format('Y-m-d');});
-       $xx = $carts1->groupBy(function ($item) {
+       $xx = collect($carts1)->groupBy(function ($item) {
             return $item->created_at->format('Y-m'); // given date is mutated to carbon by eloquent..
         })->reduce(function ($result, $group) {
             return $result->put($group->first()->date->format('Y-m'), collect([
