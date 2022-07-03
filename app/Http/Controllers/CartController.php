@@ -48,7 +48,7 @@ class CartController extends Controller
             ->select('types.name','orders.qtu','carts.created_at')
             ->where('carts.created_at','>',now()->subMonth())
             ->get()
-        ->groupBy('name','created_at');
+        ->groupBy('name');
 
         $carts = Cart::where('created_at','>' ,now()->subMonth())
             ->get();
