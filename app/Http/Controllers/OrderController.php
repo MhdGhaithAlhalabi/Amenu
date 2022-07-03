@@ -42,7 +42,6 @@ class OrderController extends Controller
      */
     public function testList(Request $request)
     {
-$table= $request->table;
 $customerId = $request->customerId;
         $orderList = $request->orderList;
         $order = json_decode($orderList, true);
@@ -51,23 +50,28 @@ $customerId = $request->customerId;
     public function store(Request $request)
     {
         try {
+            $table= $request->table;
+            $orderList = $request->orderList;
             //$order =$request->order
             //$order = json_decode($order, true);
             //$collection = collect($order);
-            if ($request->hasFile('order')) {
-                $order = json_decode(file_get_contents($request->file('order')), true);
-                $orderr = $order['order'];
+//            if ($request->hasFile('order')) {
+                //$order = json_decode(file_get_contents($request->file('order')), true);
+            $order = json_decode($orderList, true);
+            $orderr = $order['order'];
                 $collection = collect($orderr);
                 $c_price = 0;
                 $c_time = 0;
                 $temp = 0;
                 for ($i = 0; $i < $collection->count(); $i++) {
-                    $product_id = $collection[$i]['product_id'];
-                    //$product_id = $collection[$i]['id'];
+                    //$product_id = $collection[$i]['product_id'];
+                    $product_id = $collection[$i]['id'];
                     $price = Product::find($product_id)->price;
                     $priceSale = Product::find($product_id)->priceSale;
                     $time = Product::find($product_id)->time;
-                    $qtu = $collection[$i]['qtu'];
+                   // $qtu = $collection[$i]['qtu'];
+                    $qtu = $collection[$i]['qty'];
+
                     if ($priceSale == NULL) {
                         $c_price = $c_price + $price * $qtu;
                     } else {
@@ -75,12 +79,14 @@ $customerId = $request->customerId;
                     }
                     $c_time = $c_time + $time * $qtu;
                 }
-                $customer_id = $order['customer_id'];
+            $customer_id = $request->customerId;
+            //$customer_id = $order['customer_id'];
                 //$customer_id =$request->customer_id;
                 $amount = $c_price;
                 $time = $c_time;
-                $table_number = $order['table_number'];
-                //$table_number =$request->table_number;
+               // $table_number = $order['table_number'];
+            $table_number= $request->table;
+
                 $cart = Cart::create([
                     'customer_id' => $customer_id,
                     'amount' => $amount,
@@ -103,17 +109,18 @@ $customerId = $request->customerId;
                     ->first()->id;
 
                 for ($i = 0; $i < $collection->count(); $i++) {
-                    $p = $collection[$i]['product_id'];
-                    //$p = $collection[$i]['id'];
-                    $q = $collection[$i]['qtu'];
-                    $m = $collection[$i]['message'];
+                   // $p = $collection[$i]['product_id'];
+                    $p = $collection[$i]['id'];
+                   // $q = $collection[$i]['qtu'];
+                    $q = $collection[$i]['qty'];
+                   // $m = $collection[$i]['message'];
 
                     Order::create(
                         [
                             'product_id' => $p,
                             'cart_id' => $cart_id,
                             'qtu' => $q,
-                            'message' => $m,
+                            'message' => "",
                         ]
                     );
                 }
@@ -125,12 +132,13 @@ $customerId = $request->customerId;
 
                     return $time_to_eat;
                 }
-
-
-            }
-            else
-                return Response()->json('order.json file is required',400);
         }
+
+
+//            }
+//            else
+//                return Response()->json('order.json file is required',400);
+//        }
                 catch (\Exception $e){
                     return Response()->json($e->getMessage(),400);
                 }
