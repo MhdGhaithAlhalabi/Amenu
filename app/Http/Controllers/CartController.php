@@ -51,15 +51,15 @@ class CartController extends Controller
             ->get();
        $x= collect($carts1)->groupBy(function ($item) {
            return $item->created_at->format('Y-m-d');});
-
-       $xx = collect($carts1)->groupBy(function ($item) {
-            return $item->created_at->format('Y-m-d'); // given date is mutated to carbon by eloquent..
-        })->reduce(function ($result, $group) {
-            return $result->put($group->first()->created_at->format('Y-m-d'), collect([
-                'qty' => $group->sum('qtu'),
-                'name' => $group,
-            ]));
-        }, collect());
+$xx = $x->groupBy('name');
+//       $xx = collect($carts1)->groupBy(function ($item) {
+//            return $item->created_at->format('Y-m-d'); // given date is mutated to carbon by eloquent..
+//        })->reduce(function ($result, $group) {
+//            return $result->put($group->first()->created_at->format('Y-m-d'), collect([
+//                'qty' => $group->sum('qtu'),
+//                'name' => $group->name,
+//            ]));
+//        }, collect());
 
         $total = $carts->sum('amount');
         return ['report'=>$xx,'total'=>$total ];
