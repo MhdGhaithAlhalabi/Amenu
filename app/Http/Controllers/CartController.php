@@ -57,7 +57,7 @@ class CartController extends Controller
         })->reduce(function ($result, $group) {
             return $result->put($group->first()->created_at->format('Y-m-d'), collect([
                 'qty' => $group->sum('qtu'),
-                'name' => $group->name->get(),
+                'name' => $group,
             ]));
         }, collect());
 
