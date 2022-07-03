@@ -57,12 +57,12 @@ class CartController extends Controller
         })->reduce(function ($result, $group) {
             return $result->put($group->first()->created_at->format('Y-m-d'), collect([
                 'qty' => $group->count('qtu'),
-                'name' => $group->get('name'),
+                'name' => $group[name],
             ]));
         }, collect());
 
         $total = $carts->sum('amount');
-        return ['report'=>$x,'total'=>$total ];
+        return ['report'=>$xx,'total'=>$total ];
     }
     public function random5($customer_id)
     {
