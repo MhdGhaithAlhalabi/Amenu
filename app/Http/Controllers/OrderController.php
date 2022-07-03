@@ -50,8 +50,8 @@ $customerId = $request->customerId;
     public function store(Request $request)
     {
         try {
-            $table= $request->table;
-            $orderList = $request->orderList;
+           // $table= $request->table;
+            $orderList =["order"=> $request->orderList];
             //$order =$request->order
             //$order = json_decode($order, true);
             //$collection = collect($order);
