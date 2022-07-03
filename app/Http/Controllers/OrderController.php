@@ -51,16 +51,18 @@ $customerId = $request->customerId;
     {
         try {
            // $table= $request->table;
-            $orderList =["order"=> $request->orderList];
+            $orderList = $request->orderList;
             //$order =$request->order
             //$order = json_decode($order, true);
             //$collection = collect($order);
 //            if ($request->hasFile('order')) {
                 //$order = json_decode(file_get_contents($request->file('order')), true);
             $order = json_decode($orderList, true);
-            $orderr = $order['order'];
-                $collection = collect($orderr);
-                $c_price = 0;
+           // $orderr = $order['order'];
+               // $collection = collect($orderr);
+            $collection = collect($order);
+
+            $c_price = 0;
                 $c_time = 0;
                 $temp = 0;
                 for ($i = 0; $i < $collection->count(); $i++) {
