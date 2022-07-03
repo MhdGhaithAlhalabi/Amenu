@@ -47,15 +47,15 @@ class CartController extends Controller
             ->join('types','types.id','=','products.type_id')
             ->select('types.name','orders.qtu','carts.created_at')
             ->groupBy('types.name','carts.created_at')
-           ->where('carts.created_at','>',now()->subMonth())
+            ->where('carts.created_at','>',now()->subMonth())
             ->get();
         $carts = Cart::where('created_at','>' ,now()->subMonth())
             ->get();
        $x= collect($carts1)->groupBy(function ($item) {
            return $item->created_at->format('Y-m-d');});
 
-      $xx=  DB::table($x)->select(name, count('*'))->
-->groupBy( 'name', 'created_at');
+//      $xx=  DB::table($x)->select(name, count('*'))->
+//->groupBy( 'name', 'created_at');
 
         $total = $carts->sum('amount');
         return ['report'=>$carts1,'total'=>$total ];
