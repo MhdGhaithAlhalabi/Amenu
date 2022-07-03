@@ -52,9 +52,9 @@ class CartController extends Controller
        $x= collect($carts1)->groupBy(function ($item) {
            return $item->created_at->format('Y-m-d');});
        $xx = collect($carts1)->groupBy(function ($item) {
-            return $item->created_at->format('Y-m'); // given date is mutated to carbon by eloquent..
+            return $item->created_at->format('Y-m-d'); // given date is mutated to carbon by eloquent..
         })->reduce(function ($result, $group) {
-            return $result->put($group->first()->date->format('Y-m'), collect([
+            return $result->put($group->first()->created_at->format('Y-m-d'), collect([
                 'qty' => $group->count('qtu'),
                 'name' => $group->name,
             ]));
