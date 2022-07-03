@@ -45,7 +45,7 @@ class CartController extends Controller
         $carts1 = Cart::Join('orders','orders.cart_id','=','carts.id')
             ->join('products','products.id','=','orders.product_id')
             ->join('types','types.id','=','products.type_id')
-            ->select('types.name','orders.qtu','carts.created_at')
+            ->select('types.name','orders.qtu')
             ->where('carts.created_at','>',now()->subMonth())
             ->get();
         $carts = Cart::where('created_at','>' ,now()->subMonth())
@@ -53,11 +53,10 @@ class CartController extends Controller
        $x= collect($carts1)->groupBy(function ($item) {
            return $item->created_at->format('Y-m-d');});
 
-      $xx=  DB::table($x)->select(name, count('*'))->
-->groupBy( 'name', 'created_at');
+
 
         $total = $carts->sum('amount');
-        return ['report'=>$xx,'total'=>$total ];
+        return ['report'=>$x,'total'=>$total ];
     }
     public function random5($customer_id)
     {
