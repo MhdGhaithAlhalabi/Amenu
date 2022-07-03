@@ -42,8 +42,10 @@ class OrderController extends Controller
      */
     public function testList(Request $request)
     {
+
         $orderList = $request->orderList;
-        return $orderList;
+        $order = json_decode($orderList, true);
+        return $order;
     }
     public function store(Request $request)
     {

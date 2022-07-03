@@ -2,18 +2,18 @@
 use App\Http\Controllers\Authuser;
 use App\Http\Controllers\Authadmin;
 use Illuminate\Support\Facades\Route;
-
+//////admin/////
 Route::middleware(['auth:sanctum', 'abilities:admin'])->group(function () {
     Route::post('register', [Authuser::class, 'registeruser']);
 });
-
+//////api////////
 Route::post('adminregister', [Authadmin::class, 'registeradmin'])
     ->name('register.admin.store');
 
 Route::post('/login', [Authuser::class, 'login'])
     ->middleware('guest')
     ->name('login');
-
+////////admin-user//////
 Route::post('/logout', [Authuser::class, 'destroy'])
     ->middleware(['auth:sanctum','ability:admin,user'])
     ->name('logout');
