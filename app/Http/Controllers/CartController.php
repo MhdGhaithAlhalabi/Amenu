@@ -45,15 +45,24 @@ class CartController extends Controller
             ->join('products','products.id','=','orders.product_id')
             ->join('types','types.id','=','products.type_id')
             ->select('types.name','orders.qtu','carts.created_at')
-            ->where('carts.created_at','>',now()->subYear())
+            ->where('carts.created_at','>',now()->subMonth())
             ->get();
         $carts = Cart::where('created_at','>' ,now()->subMonth())
             ->get();
        $x= collect($carts1)->groupBy(function ($item) {
            return $item->created_at->format('Y-m-d');});
+       $xx = $carts1->groupBy(function ($item) {
+            return $item->date->format('Y-m'); // given date is mutated to carbon by eloquent..
+            return (new \DateTime($item->date))->format('Y-m'); // ..othwerise
+        })->reduce(function ($result, $group) {
+            return $result->put($group->first()->date->format('Y-m'), collect([
+                'qty' => $group->count('qtu'),
+                'name' => $group->name,
+            ]));
+        }, collect());
 
         $total = $carts->sum('amount');
-        return ['report'=>$x,'total'=>$total ];
+        return ['report'=>$xx,'total'=>$total ];
     }
     public function random5($customer_id)
     {
