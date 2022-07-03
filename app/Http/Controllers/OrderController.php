@@ -42,10 +42,11 @@ class OrderController extends Controller
      */
     public function testList(Request $request)
     {
-
+$table= $request->table;
+$customerId = $request->customerId;
         $orderList = $request->orderList;
         $order = json_decode($orderList, true);
-        return $order;
+        return ["orders"=> $order , "customerId"=>$customerId,"table"=>$request->table];
     }
     public function store(Request $request)
     {
