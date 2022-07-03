@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use function Symfony\Component\Routing\Loader\Configurator\collection;
 
 class CartController extends Controller
@@ -51,15 +52,9 @@ class CartController extends Controller
             ->get();
        $x= collect($carts1)->groupBy(function ($item) {
            return $item->created_at->format('Y-m-d');});
-$xx = $x->groupBy('name');
-//       $xx = collect($carts1)->groupBy(function ($item) {
-//            return $item->created_at->format('Y-m-d'); // given date is mutated to carbon by eloquent..
-//        })->reduce(function ($result, $group) {
-//            return $result->put($group->first()->created_at->format('Y-m-d'), collect([
-//                'qty' => $group->sum('qtu'),
-//                'name' => $group->name,
-//            ]));
-//        }, collect());
+
+      $xx=  DB::table($x)->select(name, count('*'))->
+->groupBy( 'name', 'created_at');
 
         $total = $carts->sum('amount');
         return ['report'=>$xx,'total'=>$total ];
