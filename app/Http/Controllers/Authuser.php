@@ -42,19 +42,19 @@ public function registeruser(Request $request){
 
                 $user = Auth::guard('apiUser')->user();
                 $token = $user->createToken('userToken', ['user'])->plainTextToken;
-                return \response($token, 201);
+                return \response()->json(['token:' => $token], 201);
             }}
             if ($input['guard'] == 'apiAdmin') {
                 if (Auth::guard('apiAdmin')->attempt(['email'=>$input['email'],'password'=>$input['password']])) {
                     $admin = Auth::guard('apiAdmin')->user();
                 $token = $admin->createToken('adminToken', ['admin'])->plainTextToken;
-                return \response($token, 201);
+                    return \response()->json(['token:' => $token], 201);
             }
         }
 }
     public function destroy(Request $request){
     auth()->user()->tokens()->delete();
-    return \response('log out',201);
+        return \response()->json('logout success', 201);
     }
 
 
