@@ -20,14 +20,14 @@ class MenuController extends Controller
         $menu_product_id = Menu::all()->pluck('product_id')->values();
         $menu1 = Product::Join('menus','menus.product_id','=','products.id')
             ->join('types','types.id','=','products.type_id')
-            ->select('types.name','product.*','menus.id')
+            ->select('types.name','products.*','menus.id')
             ->whereIn('id',$menu_product_id)
             ->get();
         $menu = Product::with('type','menu')
          ->whereIn('id',$menu_product_id)
             ->get();
      return $menu1;
-     
+
     }
     public function outOfMenu()
     {
