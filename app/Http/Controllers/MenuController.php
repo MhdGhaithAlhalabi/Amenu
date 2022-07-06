@@ -21,7 +21,7 @@ class MenuController extends Controller
         $menu1 = Product::Join('menus','menus.product_id','=','products.id')
             ->join('types','types.id','=','products.type_id')
             ->select('types.name','products.*','menus.id')
-            ->whereIn('id',$menu_product_id)
+            ->whereIn('products.id',$menu_product_id)
             ->get();
         $menu = Product::with('type','menu')
          ->whereIn('id',$menu_product_id)
