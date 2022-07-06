@@ -27,6 +27,7 @@ class MenuController extends Controller
          ->whereIn('id',$menu_product_id)
             ->get();
      return $menu1;
+     
     }
     public function outOfMenu()
     {
