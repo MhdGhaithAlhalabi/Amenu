@@ -23,6 +23,7 @@ class Authadmin extends Controller
         );
 
         $token = $admin->createToken('adminToken',['admin'])->plainTextToken;
-        return \response($token,201);
+
+        return \response()->json(["token"=> $token],201);
     }
 }

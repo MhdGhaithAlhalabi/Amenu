@@ -25,7 +25,7 @@ public function registeruser(Request $request){
         ]
     );
     //$token = $user->createToken('userToken',['user'])->plainTextToken;
-    return \response("user created",201);
+    return \response()->json("user created",201);
 }
     public function login(Request $request){
         $input = $request->all();
