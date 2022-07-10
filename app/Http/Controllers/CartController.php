@@ -96,13 +96,13 @@ class CartController extends Controller
 
         $carts = Cart::where('created_at','>' ,now()->subMonth())
             ->get();
-       $x= collect($carts1)->groupBy(function ($item) {
-           return $item->created_at->format('Y-m-d');});
+      // $x= collect($carts1)->groupBy(function ($item) {
+          // return $item->created_at->format('Y-m-d');});
 
-        $xx= collect($carts1)->groupBy('name');
+       // $xx= collect($carts1)->groupBy('name');
 
         $total = $carts->sum('amount');
-        return ['report'=>$carts1,'r2'=>$xx,'total'=>$total ];
+        return ['report'=>$carts1,'total'=>$total ];
     }
     public function random5($customer_id)
     {
