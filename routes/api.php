@@ -24,7 +24,12 @@ Route::middleware(['auth:sanctum', 'abilities:user'])->group(function (){
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    Route::post('/cartGoing/{id}',[\App\Http\Controllers\CartController::class , 'cartGoing']);//react
+    Route::post('/cartDone/{id}',[\App\Http\Controllers\CartController::class , 'cartDone']);//react
     Route::get('/cartView',[\App\Http\Controllers\CartController::class , 'index']);//react
+    Route::get('/cartGoingView',[\App\Http\Controllers\CartController::class , 'cartGoingView']);//react
+    Route::get('/cartDoneView',[\App\Http\Controllers\CartController::class , 'cartDoneView']);//react
+
     Route::get('/productView',[\App\Http\Controllers\ProductController::class , 'index']);//react
     Route::post('/productStore',[\App\Http\Controllers\ProductController::class , 'store']);//react
     Route::post('/productEdit/{id}',[\App\Http\Controllers\ProductController::class , 'update']);//react

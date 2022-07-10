@@ -20,9 +20,42 @@ class CartController extends Controller
     public function index()
     {
 
-        $carts = Cart::with('order.product' ,'customer')->get();
+        $carts = Cart::with('order.product' ,'customer')->where('status','=','waiting')->get();
 
         return  $carts;
+    }
+    public function cartGoingView()
+    {
+
+        $carts = Cart::with('order.product' ,'customer')->where('status','=','going')->get();
+
+        return  $carts;
+    }
+    public function cartDoneView()
+    {
+        $carts = Cart::with('order.product' ,'customer')->where('status','=','done')->get();
+
+        return  $carts;
+    }
+    public function cartGoing($id)
+    {
+
+        $cart = Cart::find($id);
+        $cart->status = 'going';
+        $cart->save();
+
+        return Response()->json('cart going', 201);
+
+    }
+    public function cartDone($id)
+    {
+
+        $cart = Cart::find($id);
+        $cart->status = 'done';
+        $cart->save();
+
+        return Response()->json('cart done', 201);
+
     }
     public function index2($customer_id)
     {
