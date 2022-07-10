@@ -50,18 +50,10 @@ $customerId = $request->customerId;
     public function store(Request $request)
     {
         try {
-           // $table= $request->table;
+            $points=$request->points;
             $orderList = $request->orderList;
-            //$order =$request->order
-            //$order = json_decode($order, true);
-            //$collection = collect($order);
-//            if ($request->hasFile('order')) {
-                //$order = json_decode(file_get_contents($request->file('order')), true);
             $order = json_decode($orderList, true);
-           // $orderr = $order['order'];
-               // $collection = collect($orderr);
             $collection = collect($order);
-
             $c_price = 0;
                 $c_time = 0;
                 $temp = 0;
@@ -71,22 +63,29 @@ $customerId = $request->customerId;
                     $price = Product::find($product_id)->price;
                     $priceSale = Product::find($product_id)->priceSale;
                     $time = Product::find($product_id)->time;
-                   // $qtu = $collection[$i]['qtu'];
                     $qtu = $collection[$i]['qty'];
+                    if ($points == 0) {
+                        if ($priceSale == NULL) {
+                            $c_price = $c_price + $price * $qtu;
+                        } else {
+                            $c_price = $c_price + $priceSale * $qtu;
+                        }
+                    }
+                    else {
+                        if ($priceSale == NULL) {
+                            $c_price = $c_price + $price * $qtu;
+                            $c_price = $c_price - $points * 5000;
+                        } else {
+                            $c_price = $c_price + $priceSale * $qtu;
+                            $c_price = $c_price - $points * 5000;
+                        }
 
-                    if ($priceSale == NULL) {
-                        $c_price = $c_price + $price * $qtu;
-                    } else {
-                        $c_price = $c_price + $priceSale * $qtu;
                     }
                     $c_time = $c_time + $time * $qtu;
                 }
             $customer_id = $request->customerId;
-            //$customer_id = $order['customer_id'];
-                //$customer_id =$request->customer_id;
                 $amount = $c_price;
                 $time = $c_time;
-               // $table_number = $order['table_number'];
             $table_number= $request->table;
 
                 $cart = Cart::create([
@@ -100,7 +99,7 @@ $customerId = $request->customerId;
                 event(new orderStore($text));/////all
                 if ($amount > 100000) {
                     $customer = Customer::find($customer_id);
-                    $point = $customer->points + 1;
+                    $point = $customer->points + intval($amount/100000);
                     $customer->points = $point;
                     $customer->save();
                 }
@@ -111,25 +110,23 @@ $customerId = $request->customerId;
                     ->first()->id;
 
                 for ($i = 0; $i < $collection->count(); $i++) {
-                   // $p = $collection[$i]['product_id'];
                     $p = $collection[$i]['id'];
-                   // $q = $collection[$i]['qtu'];
                     $q = $collection[$i]['qty'];
-                   // $m = $collection[$i]['message'];
+                    $m = $collection[$i]['message'];
 
                     Order::create(
                         [
                             'product_id' => $p,
                             'cart_id' => $cart_id,
                             'qtu' => $q,
-                            'message' => "",
+                            'message' => $m,
                         ]
                     );
                 }
                 $time_to_eat = Cart::where('status', '=', 'waiting')->sum('time');
                 if ($time_to_eat > 60) {
-                    $pro = Product::where('price', '<', 3000)->get();
-                    return [$pro, $time_to_eat];
+                  //  $pro = Product::where('price', '<', 3000)->get();
+                    return  $time_to_eat;
                 } else {
 
                     return $time_to_eat;
@@ -137,10 +134,6 @@ $customerId = $request->customerId;
         }
 
 
-//            }
-//            else
-//                return Response()->json('order.json file is required',400);
-//        }
                 catch (\Exception $e){
                     return Response()->json($e->getMessage(),400);
                 }

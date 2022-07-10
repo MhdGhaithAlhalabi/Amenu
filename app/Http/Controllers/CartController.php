@@ -39,21 +39,32 @@ class CartController extends Controller
     }
     public function cartGoing($id)
     {
+        try {
 
-        $cart = Cart::find($id);
-        $cart->status = 'going';
-        $cart->save();
+
+            $cart = Cart::find($id);
+            $cart->status = 'going';
+            $cart->save();
+        }
+    catch (\Exception $e){
+        return Response()->json($e->getMessage(),400);
+    }
 
         return Response()->json('cart going', 201);
 
     }
     public function cartDone($id)
     {
+        try {
 
-        $cart = Cart::find($id);
-        $cart->status = 'done';
-        $cart->save();
 
+            $cart = Cart::find($id);
+            $cart->status = 'done';
+            $cart->save();
+        }
+        catch (\Exception $e){
+            return Response()->json($e->getMessage(),400);
+        }
         return Response()->json('cart done', 201);
 
     }
