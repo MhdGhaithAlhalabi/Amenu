@@ -17,7 +17,12 @@ class FeedbackController extends Controller
 
     public function index()
     {
-        $feedback = Feedback::with('customer')->get();
+        $feedback = Feedback::with('customer')->where('status','=','0')->get();
+        return $feedback;
+    }
+    public function index2()
+    {
+        $feedback = Feedback::with('customer')->where('status','=','1')->get();
         return $feedback;
     }
     public function feedbackRead($id)
