@@ -91,6 +91,7 @@ class CartController extends Controller
             ->join('types','types.id','=','products.type_id')
             ->select('types.name as types','orders.qtu as qty','carts.created_at as date')
             ->where('carts.created_at','>',now()->subMonth())
+            ->groupby('types')
             ->orderby('date')
             ->get();
 
