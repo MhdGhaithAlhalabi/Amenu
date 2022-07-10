@@ -43,13 +43,22 @@ public function registeruser(Request $request){
                 $user = Auth::guard('apiUser')->user();
                 $token = $user->createToken('userToken', ['user'])->plainTextToken;
                 return \response()->json(['token:' => $token], 201);
-            }}
+            }
+            if (!Auth::guard('apiUser')->attempt(['email'=>$input['email'],'password'=>$input['password']])) {
+                return \response()->json(['email or password false'], 402);
+            }
+            }
+
+
             if ($input['guard'] == 'apiAdmin') {
                 if (Auth::guard('apiAdmin')->attempt(['email'=>$input['email'],'password'=>$input['password']])) {
                     $admin = Auth::guard('apiAdmin')->user();
                 $token = $admin->createToken('adminToken', ['admin'])->plainTextToken;
                     return \response()->json(['token:' => $token], 201);
             }
+                if (!Auth::guard('apiAdmin')->attempt(['email'=>$input['email'],'password'=>$input['password']])) {
+                    return \response()->json(['email or password false'], 402);
+                }
         }
 }
     public function destroy(Request $request){

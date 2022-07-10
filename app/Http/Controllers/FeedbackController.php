@@ -16,7 +16,7 @@ class FeedbackController extends Controller
      */
     public function index()
     {
-        $feedback = Feedback::all();
+        $feedback = Feedback::with('customer')->get();
         return $feedback;
     }
 
@@ -40,7 +40,8 @@ class FeedbackController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'message' => ['required'],
-            'customer_id' => ['required']
+            'customer_id' => ['required'],
+            'points' => ['nullable'],
         ]);
 
         if ($validator->fails()) {
@@ -50,7 +51,8 @@ class FeedbackController extends Controller
 
         $product = Feedback::create([
             'message' => $request->message,
-            'customer_id' => $request->customer_id
+            'customer_id' => $request->customer_id,
+            'status'=> 0
         ]);
 
         return Response()->json('feedback send',201);
