@@ -89,8 +89,9 @@ class CartController extends Controller
         $carts1 = Cart::Join('orders','orders.cart_id','=','carts.id')
             ->join('products','products.id','=','orders.product_id')
             ->join('types','types.id','=','products.type_id')
-            ->select('types.name','orders.qtu','carts.created_at')
+            ->select('types.name as types','orders.qtu as qty','carts.created_at as date')
             ->where('carts.created_at','>',now()->subMonth())
+            ->orderby('date')
             ->get();
 
         $carts = Cart::where('created_at','>' ,now()->subMonth())
@@ -101,7 +102,7 @@ class CartController extends Controller
         $xx= collect($carts1)->groupBy('name');
 
         $total = $carts->sum('amount');
-        return ['report'=>$x,'r2'=>$xx,'total'=>$total ];
+        return ['report'=>$carts1,'r2'=>$xx,'total'=>$total ];
     }
     public function random5($customer_id)
     {

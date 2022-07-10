@@ -38,6 +38,10 @@ public function registeruser(Request $request){
         if($validation->fails()){
             return \response()->json(['error'=>$validation->errors()],402);
         }
+        if(!($input['guard'] == 'apiUser' xor $input['guard'] == 'apiAdmin'))
+        {
+            return \response()->json('guard must be apiUser or admin',402);
+        }
         if ($input['guard'] == 'apiUser') {
         if (Auth::guard('apiUser')->attempt(['email'=>$input['email'],'password'=>$input['password']])) {
 

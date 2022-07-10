@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class Authadmin extends Controller
 {
+    public function createRestaurant(){
+
+    }
     public function registeradmin(Request $request){
         $fields = $request->validate([
             'name' => 'required|string',
@@ -25,5 +29,39 @@ class Authadmin extends Controller
         $token = $admin->createToken('adminToken',['admin'])->plainTextToken;
 
         return \response()->json(["token"=> $token],201);
+    }
+    public function usersView(){
+       $users = User::all();
+       return $users;
+    }
+    public function usersDelete($id){
+
+        try {
+            $user = User::find($id);
+            $user->delete();
+        }
+        catch (\Exception $e){
+            return Response()->json($e->getMessage(),400);
+        }
+        return Response()->json('user Deleted',201);
+
+    }
+
+    public function usersEdit(Request $request,$id){
+
+        $users = User::find($id);
+        $validator = Validator::make($request->all(),[
+            'name' => 'required|string',
+            'email' => 'required|string|unique:users,email',
+            'password' => 'required|string'
+        ]);
+        if ($validator->fails()) {
+            return Response()->json($validator->getMessageBag(),400);
+        }
+        $users->name = $request->name;
+        $users->email = $request->email;
+        $users->password = bcrypt($request->password);
+        $users->save();
+        return Response()->json('user edited', 201);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Authadmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,13 @@ use Illuminate\Support\Facades\Route;
 //basicAuth
 //auth:sanctum
 //header("Access-Control-Allow-Origin: http://localhost:3000");
+Route::middleware(['auth:sanctum', 'abilities:admin'])->group(function () {
+    Route::get('usersView', [Authadmin::class, 'usersView']);
+    Route::post('usersDelete/{id}', [Authadmin::class, 'usersDelete']);
+    Route::post('usersEdit/{id}', [Authadmin::class, 'usersEdit']);
+    Route::post('createRestaurant', [Authadmin::class, 'createRestaurant']);
+
+});
 Route::middleware(['auth:sanctum', 'abilities:user'])->group(function (){
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -29,7 +37,6 @@ Route::middleware(['auth:sanctum', 'abilities:user'])->group(function (){
     Route::get('/cartView',[\App\Http\Controllers\CartController::class , 'index']);//react
     Route::get('/cartGoingView',[\App\Http\Controllers\CartController::class , 'cartGoingView']);//react
     Route::get('/cartDoneView',[\App\Http\Controllers\CartController::class , 'cartDoneView']);//react
-
     Route::get('/productView',[\App\Http\Controllers\ProductController::class , 'index']);//react
     Route::post('/productStore',[\App\Http\Controllers\ProductController::class , 'store']);//react
     Route::post('/productEdit/{id}',[\App\Http\Controllers\ProductController::class , 'update']);//react
