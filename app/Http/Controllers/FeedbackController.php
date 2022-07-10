@@ -14,10 +14,18 @@ class FeedbackController extends Controller
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
+
     public function index()
     {
         $feedback = Feedback::with('customer')->get();
         return $feedback;
+    }
+    public function feedbackRead($id)
+    {
+        $feedback = Feedback::find($id);
+         $feedback->status=1;
+        $feedback->save();
+        return Response()->json('feedback reade', 201);
     }
 
     /**

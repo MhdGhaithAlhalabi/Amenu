@@ -31,7 +31,8 @@ public function registeruser(Request $request){
         $input = $request->all();
         $validation = validator::make($input,[
                 'email' => 'required|string',
-                'password' => 'required|string'
+                'password' => 'required|string',
+                'guard' => 'required'
             ]
         ) ;
         if($validation->fails()){
