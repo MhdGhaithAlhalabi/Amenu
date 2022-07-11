@@ -89,7 +89,7 @@ class CartController extends Controller
         $carts1 = Cart::Join('orders','orders.cart_id','=','carts.id')
             ->join('products','products.id','=','orders.product_id')
             ->join('types','types.id','=','products.type_id')
-            ->select('types.name ','orders.qtu ','carts.created_at')
+            ->select('types.name','orders.qtu ','carts.created_at')
             ->where('carts.created_at','>',now()->subMonth())
             ->get();
 
