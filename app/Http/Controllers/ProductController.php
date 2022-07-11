@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Gift;
 use App\Models\Product;
 use http\Env\Response;
 use Illuminate\Http\Request;
@@ -23,6 +24,49 @@ class ProductController extends Controller
         return $product;
 
     }
+
+    public function giftView()
+    {
+        $gift = Gift::all();
+        return $gift;
+
+    }
+
+    public function giftStore(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'image' => 'nullable',
+            'active' => ['nullable'],
+            'count' => ['nullable'],
+        ]);
+
+        if ($validator->fails()) {
+            return Response()->json($validator->getMessageBag(), 400);
+        }
+        $gift = Gift::create([
+            'name' => $request->name,
+            'image' => $request->image,
+            'active' => 0,
+            'count' => 0,
+        ]);
+
+        return Response()->json('gift stored', 201);
+
+    }
+
+    public function giftActive($id)
+    {
+        $gifts = Gift::where('active', '!=', '0')->get();
+        foreach ($gifts as $gift) {
+            $gift->update(['active' => 0]);
+        }
+        $gift = Gift::find($id);
+        $gift->update(['active' => 1]);
+        return Response()->json('gift activated', 201);
+
+    }
+
 
     /**
      * Show the form for creating a new resource.

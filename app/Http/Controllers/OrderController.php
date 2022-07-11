@@ -124,11 +124,11 @@ class OrderController extends Controller
                 );
             }
             $time_to_eat = Cart::where('status', '=', 'waiting')->avg('time');
-            if ($time_to_eat > 60) {
-                //  $pro = Product::where('price', '<', 3000)->get();
-                return intval($time_to_eat);
+           $timee = intval($time_to_eat);
+            if ($timee > 60) {
+                return $timee;
             } else {
-                return intval($time_to_eat);
+                return $timee;
             }
         } catch (\Exception $e) {
             return Response()->json($e->getMessage(), 400);
