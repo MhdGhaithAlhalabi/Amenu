@@ -96,7 +96,7 @@ class CartController extends Controller
         return ['report'=>$carts1,'total'=>$total ];
     }
     public function monthlyReport(){
-        $carts2 = Cart::with('order:cart_id,qtu,product_id','order.product:type_id','order.product.type:id,name')
+        $carts2 = Cart::with('order:cart_id,qtu,product_id','order.product:id,type_id','order.product.type:id,name')
             ->where('status','=','waiting')
             ->where('carts.created_at','>',now()->subMonth())
             ->get();
