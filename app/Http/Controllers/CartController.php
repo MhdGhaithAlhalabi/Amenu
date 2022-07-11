@@ -26,7 +26,8 @@ class CartController extends Controller
          ->join('customers','customers.id','=','carts.customer_id')
          ->select('carts.id','carts.amount','carts.time','carts.status','carts.table_number','orders.qtu','orders.message','products.name','customers.name as customer_name','customers.phone')
          ->get();
-        return  $carts;
+     $collections = collect($carts)->groupBy('id');
+        return  $collections;
     }
     public function cartGoingView()
     {
