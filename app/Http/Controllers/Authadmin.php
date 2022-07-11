@@ -19,7 +19,7 @@ class Authadmin extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'domain' => ['required'],
+            'domain' => ['required','unique:restaurants,domain'],
         ]);
         if ($validator->fails()) {
             return Response()->json($validator->getMessageBag(), 400);
