@@ -97,7 +97,7 @@ class CartController extends Controller
             ->get();
        $x= collect($carts1)->groupBy(function ($item) {
            return $item->created_at->format('Y-m-d');});
-$x2= collect($x);
+$x2= collect($x)->groupBy('types');
         $xx= collect($carts1)->groupBy('types');
 
         $total = $carts->sum('amount');
