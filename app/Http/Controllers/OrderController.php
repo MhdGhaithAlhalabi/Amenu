@@ -125,10 +125,11 @@ class OrderController extends Controller
             }
             $time_to_eat = Cart::where('status', '=', 'waiting')->avg('time');
            $timee = intval($time_to_eat);
+           $coll = collect($timee);
             if ($timee > 60) {
-                return $timee;
+                return $coll;
             } else {
-                return $timee;
+                return $coll;
             }
         } catch (\Exception $e) {
             return Response()->json($e->getMessage(), 400);
