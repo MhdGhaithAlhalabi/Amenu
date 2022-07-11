@@ -86,29 +86,28 @@ class CartController extends Controller
         return ['report'=>$carts1,'total'=>$total ];
     }
     public function monthlyReport(){
-//        $carts1 = Cart::Join('orders','orders.cart_id','=','carts.id')
-//            ->join('products','products.id','=','orders.product_id')
-//            ->join('types','types.id','=','products.type_id')
-//            ->select('types.name as types','orders.qtu as qty','carts.created_at as date')
-//            ->where('carts.created_at','>',now()->subMonth())
-//            ->orderby('date')
-//            ->get();
-        $carts1 = DB::select('types.name as types','orders.qtu as qty','carts.created_at as date')
-            ->from('orders','products','types','carts')
-            ->where('orders.cart_id','=','carts.id','and','products.id','=','orders.product_id','and','types.id','=','products.type_id')
+        $carts1 = Cart::Join('orders','orders.cart_id','=','carts.id')
+            ->join('products','products.id','=','orders.product_id')
+            ->join('types','types.id','=','products.type_id')
+            ->select('types.name as types','orders.qtu as qty','carts.created_at as date')
+            ->where('carts.created_at','>',now()->subMonth())
             ->get();
+
 
 
         $carts = Cart::where('created_at','>' ,now()->subMonth())
             ->get();
-      // $x= collect($carts1)->groupBy(function ($item) {
-          // return $item->created_at->format('Y-m-d');});
+       $x= collect($carts1)->groupBy(function ($item) {
+           return $item->date->format('Y-m-d');});
 
-       // $xx= collect($carts1)->groupBy('name');
+        $xx= collect($carts1)->groupBy('types');
 
         $total = $carts->sum('amount');
-        return ['report'=>$carts1,'total'=>$total ];
+        return ['report'=>$x,'r2'=>$xx,'total'=>$total ];
     }
+
+
+
     public function random5($customer_id)
     {
           $cart = Cart::Join('orders','orders.cart_id','=','carts.id')
