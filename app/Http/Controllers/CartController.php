@@ -89,20 +89,19 @@ class CartController extends Controller
         $carts1 = Cart::Join('orders','orders.cart_id','=','carts.id')
             ->join('products','products.id','=','orders.product_id')
             ->join('types','types.id','=','products.type_id')
-            ->select('types.name as types','orders.qtu as qty')
+            ->select('types.name as types','orders.qtu as qty','carts.created_at')
             ->where('carts.created_at','>',now()->subMonth())
-            ->groupby('carts.created_at')
             ->get();
 
         $carts = Cart::where('created_at','>' ,now()->subMonth())
             ->get();
        $x= collect($carts1)->groupBy(function ($item) {
            return $item->created_at->format('Y-m-d');});
-
+$x2= collect($x);
         $xx= collect($carts1)->groupBy('types');
 
         $total = $carts->sum('amount');
-        return ['report'=>$carts1,'r2'=>$xx,'total'=>$total ];
+        return ['report'=>$x2,'r2'=>$xx,'total'=>$total ];
     }
 
 
