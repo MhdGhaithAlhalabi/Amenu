@@ -89,7 +89,7 @@ class CartController extends Controller
         $carts1 = Cart::Join('orders','orders.cart_id','=','carts.id')
             ->join('products','products.id','=','orders.product_id')
             ->join('types','types.id','=','products.type_id')
-            ->select('types.name as types','orders.qtu as qty','carts.created_at as date')
+            ->select('types.name as types','orders.qtu as qty','carts.created_at')
             ->where('carts.created_at','>',now()->subMonth())
             ->get();
 
@@ -98,7 +98,7 @@ class CartController extends Controller
         $carts = Cart::where('created_at','>' ,now()->subMonth())
             ->get();
        $x= collect($carts1)->groupBy(function ($item) {
-           return $item->date->format('Y-m-d');});
+           return $item->created_at->format('Y-m-d');});
 
         $xx= collect($carts1)->groupBy('types');
 
