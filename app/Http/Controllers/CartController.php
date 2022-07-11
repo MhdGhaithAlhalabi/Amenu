@@ -33,14 +33,17 @@ class CartController extends Controller
     }
     public function cartGoingView()
     {
+        $carts = Cart::with('order:cart_id,qtu,message,product_id','order.product:id,name' ,'customer:id,name,phone')->where('status','=','going')->get();
 
-        $carts = Cart::with('order.product' ,'customer')->where('status','=','going')->get();
+       // $carts = Cart::with('order.product' ,'customer')->where('status','=','going')->get();
 
         return  $carts;
     }
     public function cartDoneView()
     {
-        $carts = Cart::with('order.product' ,'customer')->where('status','=','done')->get();
+        $carts = Cart::with('order:cart_id,qtu,message,product_id','order.product:id,name' ,'customer:id,name,phone')->where('status','=','done')->get();
+
+       // $carts = Cart::with('order.product' ,'customer')->where('status','=','done')->get();
 
         return  $carts;
     }
