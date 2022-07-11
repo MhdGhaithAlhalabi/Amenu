@@ -98,9 +98,9 @@ class CartController extends Controller
        $x= collect($carts1)->groupBy(function ($item) {
            return $item->created_at->format('Y-m-d');});
         $xx= collect($carts1)->groupBy('types');
-
+$x2 = collect($x)->sortBy('types');
         $total = $carts->sum('amount');
-        return ['report'=>$x,'r2'=>$xx,'total'=>$total ];
+        return ['report'=>$x2,'r2'=>$xx,'total'=>$total ];
     }
 
 
