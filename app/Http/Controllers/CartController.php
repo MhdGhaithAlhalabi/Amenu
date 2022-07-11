@@ -96,10 +96,10 @@ class CartController extends Controller
         return ['report'=>$carts1,'total'=>$total ];
     }
     public function monthlyReport(){
-        $carts2 = Cart::with('order:cart_id,qtu,product_id','order.product:id,type_id','order.product.type:id,name')
-            ->where('status','=','waiting')
-            ->where('carts.created_at','>',now()->subMonth())
-            ->get();
+//        $carts2 = Cart::with('order:cart_id,qtu,product_id','order.product:id,type_id','order.product.type:id,name')
+//            ->where('status','=','waiting')
+//            ->where('carts.created_at','>',now()->subMonth())
+//            ->get();
 
         $carts1 = Cart::Join('orders','orders.cart_id','=','carts.id')
             ->join('products','products.id','=','orders.product_id')
@@ -116,7 +116,7 @@ class CartController extends Controller
         $xx= collect($carts1)->groupBy('name');
 $x2 = collect($x)->sortBy('name');
         $total = $carts->sum('amount');
-        return ['report'=>$carts2,'r2'=>$xx,'total'=>$total ];
+        return ['report'=>$x,'r2'=>$xx,'total'=>$total ];
     }
 
 
