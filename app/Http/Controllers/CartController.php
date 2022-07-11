@@ -20,8 +20,12 @@ class CartController extends Controller
     public function index()
     {
 
-        $carts = Cart::with('order.product' ,'customer')->where('status','=','waiting')->get();
-
+       // $carts = Cart::with('order.product' ,'customer')->where('status','=','waiting')->get();
+     $carts = Carts::join('orders','orders.cart_id','=','carts.id')
+         ->join('products','products.id','=','orders.product_id')
+         ->join('customers','customers.id','=','carts.customer_id')
+         ->select('carts.id','carts.amount','carts.time','carts.status','carts.table_number','orders.qtu','orders.message','products.name','customers.name as customer_name','customers.phone')
+         ->get();
         return  $carts;
     }
     public function cartGoingView()
