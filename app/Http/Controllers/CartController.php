@@ -20,7 +20,7 @@ class CartController extends Controller
     public function index()
     {
 
-        $carts = Cart::with('order:cart_id,qtu,message,product_id','order.product:id,name' ,'customer:id,name,phone')->where('status','=','waiting')->get();
+        $carts = Cart::with('order:cart_id,qtu,message,product_id', 'order.product:id,name', 'customer:id,name,phone')->where('status', '=', 'waiting')->get();
 //     $carts = Cart::join('orders','orders.cart_id','=','carts.id')
 //         ->join('products','products.id','=','orders.product_id')
 //         ->join('customers','customers.id','=','carts.customer_id')
@@ -29,24 +29,27 @@ class CartController extends Controller
 //         ->get();
 //     $collections = collect($carts)->groupBy('id');
 
-        return $carts ;
+        return $carts;
     }
+
     public function cartGoingView()
     {
-        $carts = Cart::with('order:cart_id,qtu,message,product_id','order.product:id,name' ,'customer:id,name,phone')->where('status','=','going')->get();
+        $carts = Cart::with('order:cart_id,qtu,message,product_id', 'order.product:id,name', 'customer:id,name,phone')->where('status', '=', 'going')->get();
 
-       // $carts = Cart::with('order.product' ,'customer')->where('status','=','going')->get();
+        // $carts = Cart::with('order.product' ,'customer')->where('status','=','going')->get();
 
-        return  $carts;
+        return $carts;
     }
+
     public function cartDoneView()
     {
-        $carts = Cart::with('order:cart_id,qtu,message,product_id','order.product:id,name' ,'customer:id,name,phone')->where('status','=','done')->get();
+        $carts = Cart::with('order:cart_id,qtu,message,product_id', 'order.product:id,name', 'customer:id,name,phone')->where('status', '=', 'done')->get();
 
-       // $carts = Cart::with('order.product' ,'customer')->where('status','=','done')->get();
+        // $carts = Cart::with('order.product' ,'customer')->where('status','=','done')->get();
 
-        return  $carts;
+        return $carts;
     }
+
     public function cartGoing($id)
     {
         try {
@@ -55,14 +58,14 @@ class CartController extends Controller
             $cart = Cart::find($id);
             $cart->status = 'going';
             $cart->save();
+        } catch (\Exception $e) {
+            return Response()->json($e->getMessage(), 400);
         }
-    catch (\Exception $e){
-        return Response()->json($e->getMessage(),400);
-    }
 
         return Response()->json('cart going', 201);
 
     }
+
     public function cartDone($id)
     {
         try {
@@ -71,69 +74,73 @@ class CartController extends Controller
             $cart = Cart::find($id);
             $cart->status = 'done';
             $cart->save();
-        }
-        catch (\Exception $e){
-            return Response()->json($e->getMessage(),400);
+        } catch (\Exception $e) {
+            return Response()->json($e->getMessage(), 400);
         }
         return Response()->json('cart done', 201);
 
     }
+
     public function index2($customer_id)
     {
-        $carts = Cart::with('order.product')->where('customer_id','=',$customer_id)->get();
-        return  $carts;
+        $carts = Cart::with('order.product')->where('customer_id', '=', $customer_id)->get();
+        return $carts;
     }
-    public function dailyReport(){
-        $carts1 = Cart::Join('orders','orders.cart_id','=','carts.id')
-            ->join('products','products.id','=','orders.product_id')
-            ->join('types','types.id','=','products.type_id')
-            ->select('types.name','orders.qtu','carts.created_at')
-            ->where('carts.created_at','>',now()->subDay())
+
+    public function dailyReport()
+    {
+        $carts1 = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
+            ->join('products', 'products.id', '=', 'orders.product_id')
+            ->join('types', 'types.id', '=', 'products.type_id')
+            ->select('types.name', 'orders.qtu', 'carts.created_at')
+            ->where('carts.created_at', '>', now()->subDay())
             ->get();
-        $carts = Cart::where('created_at','>' ,now()->subDay())
+        $carts = Cart::where('created_at', '>', now()->subDay())
             ->get();
         $total = $carts->sum('amount');
-        return ['report'=>$carts1,'total'=>$total ];
+        return ['report' => $carts1, 'total' => $total];
     }
-    public function monthlyReport(){
+
+    public function monthlyReport()
+    {
 //        $carts2 = Cart::with('order:cart_id,qtu,product_id','order.product:id,type_id','order.product.type:id,name')
 //            ->where('status','=','waiting')
 //            ->where('carts.created_at','>',now()->subMonth())
 //            ->get();
 
-        $carts1 = Cart::Join('orders','orders.cart_id','=','carts.id')
-            ->join('products','products.id','=','orders.product_id')
-            ->join('types','types.id','=','products.type_id')
-            ->select('types.name','orders.qtu','carts.created_at')
-            ->where('carts.created_at','>',now()->subMonth())
+        $carts1 = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
+            ->join('products', 'products.id', '=', 'orders.product_id')
+            ->join('types', 'types.id', '=', 'products.type_id')
+            ->select('types.name', 'orders.qtu', 'carts.created_at')
+            ->where('carts.created_at', '>', now()->subMonth())
             ->orderby('types.name')
             ->get();
 
-        $carts = Cart::where('created_at','>' ,now()->subMonth())
+        $carts = Cart::where('created_at', '>', now()->subMonth())
             ->get();
-       $x= collect($carts1)->groupBy(function ($item) {
-           return $item->created_at->format('Y-m-d');});
-        $xx= collect($carts1)->groupBy('name');
-$x2 = collect($x)->sortBy('name');
+        $x = collect($carts1)->groupBy(function ($item) {
+            return $item->created_at->format('Y-m-d');
+        });
+        $xx = collect($carts1)->groupBy('name');
+        $x2 = collect($x)->sortBy('name');
         $total = $carts->sum('amount');
-        return ['report'=>$x,'r2'=>$xx,'total'=>$total ];
+        return ['report' => $x, 'r2' => $xx, 'total' => $total];
     }
-
 
 
     public function random5($customer_id)
     {
-          $cart = Cart::Join('orders','orders.cart_id','=','carts.id')
-            ->join('products','products.id','=','orders.product_id')
-             ->join('types','types.id','=','products.type_id')
-             ->select('types.id')
+        $cart = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
+            ->join('products', 'products.id', '=', 'orders.product_id')
+            ->join('types', 'types.id', '=', 'products.type_id')
+            ->select('types.id')
             ->where('carts.customer_id', $customer_id)->get();
 
-             $Collection1 = collect($cart)->countBy('id')->sortDesc();
-         $Collection2 = $Collection1->keys()->first();
-          $c = $Collection2;
-      $product =  Product::with('type')->where('type_id','=',$c)->inRandomOrder()->limit(5)->get();
-        return   $product;
+        $Collection1 = collect($cart)->countBy('id')->sortDesc();
+        $Collection2 = $Collection1->keys()->first();
+        $c = $Collection2;
+        $product = Product::with('type')->where('type_id', '=', $c)->inRandomOrder()->limit(5)->get();
+        return $product;
     }
 
 
@@ -150,7 +157,7 @@ $x2 = collect($x)->sortBy('name');
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -161,7 +168,7 @@ $x2 = collect($x)->sortBy('name');
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Cart  $cart
+     * @param \App\Models\Cart $cart
      * @return \Illuminate\Http\Response
      */
     public function show(Cart $cart)
@@ -172,7 +179,7 @@ $x2 = collect($x)->sortBy('name');
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Cart  $cart
+     * @param \App\Models\Cart $cart
      * @return \Illuminate\Http\Response
      */
     public function edit(Cart $cart)
@@ -183,8 +190,8 @@ $x2 = collect($x)->sortBy('name');
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Cart  $cart
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Cart $cart
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Cart $cart)
@@ -195,7 +202,7 @@ $x2 = collect($x)->sortBy('name');
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Cart  $cart
+     * @param \App\Models\Cart $cart
      * @return \Illuminate\Http\Response
      */
     public function destroy(Cart $cart)

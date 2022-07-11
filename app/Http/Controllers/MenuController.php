@@ -16,32 +16,33 @@ class MenuController extends Controller
      */
     public function index()
     {
-     //$menu =   Menu::with('product.type')->get();
+        //$menu =   Menu::with('product.type')->get();
         $menu_product_id = Menu::all()->pluck('product_id')->values();
 //        $menu1 = Product::Join('menus','menus.product_id','=','products.id')
 //            ->join('types','types.id','=','products.type_id')
 //            ->select('types.name','products.*','menus.id')
 //            ->whereIn('products.id',$menu_product_id)
 //            ->get();
-        $menu = Product::with('type','menu')
-         ->whereIn('id',$menu_product_id)
+        $menu = Product::with('type', 'menu')
+            ->whereIn('id', $menu_product_id)
             ->get();
-     return $menu;
+        return $menu;
 
     }
+
     public function outOfMenu()
     {
-try{        //product not in menu
-         $menu_product_id = Menu::all()->pluck('product_id')->values();
-        $product =   Product::with('type')
-            ->whereNotIn('id',$menu_product_id)
-            ->get();
-        }
-        catch (\Exception $e){
-            return Response()->json($e->getMessage(),400);
+        try {        //product not in menu
+            $menu_product_id = Menu::all()->pluck('product_id')->values();
+            $product = Product::with('type')
+                ->whereNotIn('id', $menu_product_id)
+                ->get();
+        } catch (\Exception $e) {
+            return Response()->json($e->getMessage(), 400);
         }
         return $product;
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -55,17 +56,17 @@ try{        //product not in menu
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'product_id' => ['required'],
         ]);
 
         if ($validator->fails()) {
-            return Response()->json($validator->getMessageBag(),400);
+            return Response()->json($validator->getMessageBag(), 400);
         }
 
         $menu = Menu::create([
@@ -78,7 +79,7 @@ try{        //product not in menu
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Menu  $menu
+     * @param \App\Models\Menu $menu
      * @return \Illuminate\Http\Response
      */
     public function show(Menu $menu)
@@ -89,7 +90,7 @@ try{        //product not in menu
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Menu  $menu
+     * @param \App\Models\Menu $menu
      * @return \Illuminate\Http\Response
      */
     public function edit(Menu $menu)
@@ -100,8 +101,8 @@ try{        //product not in menu
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Menu  $menu
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Menu $menu
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Menu $menu)
@@ -112,7 +113,7 @@ try{        //product not in menu
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Menu  $menu
+     * @param \App\Models\Menu $menu
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
@@ -120,10 +121,9 @@ try{        //product not in menu
         try {
             $menu = Menu::find($id);
             $menu->delete();
+        } catch (\Exception $e) {
+            return Response()->json($e->getMessage(), 400);
         }
-        catch (\Exception $e){
-            return Response()->json($e->getMessage(),400);
-        }
-        return Response()->json('product Deleted from menu',201);
+        return Response()->json('product Deleted from menu', 201);
     }
 }

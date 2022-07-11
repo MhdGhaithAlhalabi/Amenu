@@ -3,16 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Restaurant;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class Authadmin extends Controller
 {
-    public function createRestaurant(){
-
+    public function restaurantView()
+    {
+        $restaurants = Restaurant::select(['name','domain'])->get();
+        return $restaurants;
     }
-    public function registeradmin(Request $request){
+    public function createRestaurant(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'domain' => ['required'],
+        ]);
+        if ($validator->fails()) {
+            return Response()->json($validator->getMessageBag(), 400);
+        }
+        $restaurant = Restaurant::create([
+            'name' => $request->name,
+            'domain' => $request->domain,
+        ]);
+
+        return Response()->json('Restaurant stored', 201);
+    }
+
+    public function registeradmin(Request $request)
+    {
         $fields = $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|unique:users,email',
@@ -26,37 +47,41 @@ class Authadmin extends Controller
             ]
         );
 
-        $token = $admin->createToken('adminToken',['admin'])->plainTextToken;
+        $token = $admin->createToken('adminToken', ['admin'])->plainTextToken;
 
-        return \response()->json(["token"=> $token],201);
+        return \response()->json(["token" => $token], 201);
     }
-    public function usersView(){
-       $users = User::all();
-       return $users;
+
+    public function usersView()
+    {
+        $users = User::all();
+        return $users;
     }
-    public function usersDelete($id){
+
+    public function usersDelete($id)
+    {
 
         try {
             $user = User::find($id);
             $user->delete();
+        } catch (\Exception $e) {
+            return Response()->json($e->getMessage(), 400);
         }
-        catch (\Exception $e){
-            return Response()->json($e->getMessage(),400);
-        }
-        return Response()->json('user Deleted',201);
+        return Response()->json('user Deleted', 201);
 
     }
 
-    public function usersEdit(Request $request,$id){
+    public function usersEdit(Request $request, $id)
+    {
 
         $users = User::find($id);
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string'
         ]);
         if ($validator->fails()) {
-            return Response()->json($validator->getMessageBag(),400);
+            return Response()->json($validator->getMessageBag(), 400);
         }
         $users->name = $request->name;
         $users->email = $request->email;

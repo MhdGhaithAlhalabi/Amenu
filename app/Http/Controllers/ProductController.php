@@ -19,8 +19,8 @@ class ProductController extends Controller
     public function index()
     {
         $product = Product::all();
-       //$product = json_encode($product);
-      return  $product;
+        //$product = json_encode($product);
+        return $product;
 
     }
 
@@ -37,16 +37,16 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'type_id' => ['required'],
             'name' => ['required', 'string', 'max:255'],
             'details' => ['nullable'],
-            'image'=>'nullable',
+            'image' => 'nullable',
             'price' => ['required'],
             'priceSale' => ['nullable'],
             'status' => ['nullable'],
@@ -54,7 +54,7 @@ class ProductController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return Response()->json($validator->getMessageBag(),400);
+            return Response()->json($validator->getMessageBag(), 400);
         }
         // Handle File Upload
 //        if($request->hasFile('image'))
@@ -91,7 +91,7 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function show(Product $product)
@@ -102,7 +102,7 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function edit(Product $product)
@@ -113,25 +113,25 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Product $product
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         $product = Product::find($id);
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'type_id' => ['required'],
             'name' => ['required', 'string', 'max:255'],
             'details' => ['nullable'],
-            'image'=>'nullable',
+            'image' => 'nullable',
             'price' => ['required'],
             'priceSale' => ['nullable'],
             'status' => ['nullable'],
             'time' => ['required'],
         ]);
         if ($validator->fails()) {
-            return Response()->json($validator->getMessageBag(),400);
+            return Response()->json($validator->getMessageBag(), 400);
         }
 //        // Handle File Upload
 //        if($request->hasFile('image')){
@@ -148,17 +148,17 @@ class ProductController extends Controller
 //        } else {
 //            $fileNameToStore = NULL;
 //        }
-            $type_id =$request->type_id;
-            $name =$request->name;
-            $details =$request->details;
-            $price = $request->price;
-            $priceSale = $request->priceSale;
-            $status = $request->status;
-            $time = $request->time;
-            $image = $request->image;
+        $type_id = $request->type_id;
+        $name = $request->name;
+        $details = $request->details;
+        $price = $request->price;
+        $priceSale = $request->priceSale;
+        $status = $request->status;
+        $time = $request->time;
+        $image = $request->image;
         $product->type_id = $type_id;
         $product->name = $name;
-        $product->details =$details;
+        $product->details = $details;
         $product->price = $price;
         $product->priceSale = $priceSale;
         $product->status = $status;
@@ -178,7 +178,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Product  $product
+     * @param \App\Models\Product $product
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
@@ -190,11 +190,10 @@ class ProductController extends Controller
 //            Storage::delete('public/cover_images/'.$product->image);
 //        }
             $product->delete();
+        } catch (\Exception $e) {
+            return Response()->json($e->getMessage(), 400);
         }
-        catch (\Exception $e){
-            return Response()->json($e->getMessage(),400);
-        }
-        return Response()->json('product Deleted',201);
+        return Response()->json('product Deleted', 201);
 
     }
 }

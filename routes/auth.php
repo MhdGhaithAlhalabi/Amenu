@@ -1,7 +1,9 @@
 <?php
+
 use App\Http\Controllers\Authuser;
 use App\Http\Controllers\Authadmin;
 use Illuminate\Support\Facades\Route;
+
 //////admin/////
 Route::middleware(['auth:sanctum', 'abilities:admin'])->group(function () {
     Route::post('register', [Authuser::class, 'registeruser']);
@@ -15,7 +17,7 @@ Route::post('/login', [Authuser::class, 'login'])
     ->name('login');
 ////////admin-user//////
 Route::post('/logout', [Authuser::class, 'destroy'])
-    ->middleware(['auth:sanctum','ability:admin,user'])
+    ->middleware(['auth:sanctum', 'ability:admin,user'])
     ->name('logout');
 
 

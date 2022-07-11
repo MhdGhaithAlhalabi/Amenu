@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Providers\RouteServiceProvider;
@@ -22,7 +23,7 @@ class RegisteredAdminController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:admins','unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:admins', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 

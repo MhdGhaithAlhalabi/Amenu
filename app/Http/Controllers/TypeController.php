@@ -16,8 +16,8 @@ class TypeController extends Controller
      */
     public function index()
     {
-         $type =Type::with('product')->get();
-         // $type = json_encode($type);
+        $type = Type::with('product')->get();
+        // $type = json_encode($type);
         return $type;
 
     }
@@ -35,17 +35,17 @@ class TypeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return false|string
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'name' => ['required', 'string', 'max:255','unique:types'],
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255', 'unique:types'],
         ]);
 
         if ($validator->fails()) {
-            return Response()->json($validator->getMessageBag(),400);
+            return Response()->json($validator->getMessageBag(), 400);
         }
 
         $product = Type::create([
@@ -58,7 +58,7 @@ class TypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Type  $type
+     * @param \App\Models\Type $type
      * @return \Illuminate\Http\Response
      */
     public function show(Type $type)
@@ -69,7 +69,7 @@ class TypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Type  $type
+     * @param \App\Models\Type $type
      * @return \Illuminate\Http\Response
      */
     public function edit(Type $type)
@@ -80,24 +80,24 @@ class TypeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Type  $type
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Type $type
      * @return false|string
      */
     public function update(Request $request, $id)
     {
-       $type = Type::find($id);
-        $validator = Validator::make($request->all(),[
-            'name' => ['required', 'string', 'max:255','unique:types'],
+        $type = Type::find($id);
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255', 'unique:types'],
         ]);
 
         if ($validator->fails()) {
-            return Response()->json($validator->getMessageBag(),400);
+            return Response()->json($validator->getMessageBag(), 400);
         }
 
-             $name = $request->name;
-             $type->name = $name;
-             $type->save();
+        $name = $request->name;
+        $type->name = $name;
+        $type->save();
 
         return Response()->json('Type edited', 201);
 
@@ -106,18 +106,17 @@ class TypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Type  $type
+     * @param \App\Models\Type $type
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
         try {
-        $type = Type::find($id);
-        $type->delete();
-    }
-    catch (\Exception $e){
-        return Response()->json($e->getMessage(),400);
-    }
-        return Response()->json('Type Deleted',201);
+            $type = Type::find($id);
+            $type->delete();
+        } catch (\Exception $e) {
+            return Response()->json($e->getMessage(), 400);
+        }
+        return Response()->json('Type Deleted', 201);
     }
 }
