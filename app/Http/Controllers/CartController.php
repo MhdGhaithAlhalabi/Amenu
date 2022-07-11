@@ -20,7 +20,7 @@ class CartController extends Controller
     public function index()
     {
 
-        $carts = Cart::with('order:qtu' ,'customer:name')->where('status','=','waiting')->get();
+        $carts = Cart::with('order:id,qtu' ,'customer:id,name')->where('status','=','waiting')->get();
 //     $carts = Cart::join('orders','orders.cart_id','=','carts.id')
 //         ->join('products','products.id','=','orders.product_id')
 //         ->join('customers','customers.id','=','carts.customer_id')
