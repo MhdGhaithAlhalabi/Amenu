@@ -47,6 +47,8 @@ $customerId = $request->customerId;
         $order = json_decode($orderList, true);
         return ["orders"=> $order , "customerId"=>$customerId,"table"=>$request->table];
     }
+
+
     public function store(Request $request)
     {
         try {
@@ -58,13 +60,12 @@ $customerId = $request->customerId;
                 $c_time = 0;
                 $temp = 0;
                 for ($i = 0; $i < $collection->count(); $i++) {
-                    //$product_id = $collection[$i]['product_id'];
                     $product_id = $collection[$i]['id'];
                     $price = Product::find($product_id)->price;
                     $priceSale = Product::find($product_id)->priceSale;
                     $time = Product::find($product_id)->time;
                     $qtu = $collection[$i]['qty'];
-                    if ($points == 0) {
+                    if ($points == 0 || $points == NULL) {
                         if ($priceSale == NULL) {
                             $c_price = $c_price + $price * $qtu;
                         } else {
@@ -112,18 +113,18 @@ $customerId = $request->customerId;
                 for ($i = 0; $i < $collection->count(); $i++) {
                     $p = $collection[$i]['id'];
                     $q = $collection[$i]['qty'];
-                    $m = $collection[$i]['message'];
+                   // $m = $collection[$i]['message'];
 
                     Order::create(
                         [
                             'product_id' => $p,
                             'cart_id' => $cart_id,
                             'qtu' => $q,
-                            'message' => $m,
+                            'message' => "",
                         ]
                     );
                 }
-                $time_to_eat = Cart::where('status', '=', 'waiting')->sum('time');
+                $time_to_eat = Cart::where('status', '=', 'waiting')->avg('time');
                 if ($time_to_eat > 60) {
                   //  $pro = Product::where('price', '<', 3000)->get();
                     return  $time_to_eat;
