@@ -125,18 +125,23 @@ class OrderController extends Controller
             }
             $time_to_eat = Cart::where('status', '=', 'waiting')->avg('time');
            $timee = intval($time_to_eat);
-           $coll = collect($timee);
+           //$coll = collect($timee);
             if ($timee > 60) {
-                return $coll;
+                return $timee;
             } else {
-                return $coll;
+                return $timee;
             }
         } catch (\Exception $e) {
             return Response()->json($e->getMessage(), 400);
         }
 
     }
+public function teeest(){
+    $time_to_eat = Cart::where('status', '=', 'waiting')->avg('time');
+    $timee = intval($time_to_eat);
 
+    return $timee;
+}
     /**
      * Display the specified resource.
      *
