@@ -95,7 +95,8 @@ class CartController extends Controller
 //            ->get();
         $carts1 = DB::select('types.name as types','orders.qtu as qty','carts.created_at as date')
             ->from('orders','products','types','carts')
-            ->where('orders.cart_id','=','carts.id','and','products.id','=','orders.product_id','and','types.id','=','products.type_id');
+            ->where('orders.cart_id','=','carts.id','and','products.id','=','orders.product_id','and','types.id','=','products.type_id')
+            ->get();
 
 
         $carts = Cart::where('created_at','>' ,now()->subMonth())
