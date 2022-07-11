@@ -130,7 +130,7 @@ class OrderController extends Controller
             if ($timee > 60) {
                 return $timee;
             } else {
-                return 255;
+                return [255];
             }
         } catch (\Exception $e) {
             return Response()->json($e->getMessage(), 400);
