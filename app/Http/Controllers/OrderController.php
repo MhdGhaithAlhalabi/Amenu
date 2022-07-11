@@ -128,9 +128,9 @@ class OrderController extends Controller
            $timee = intval($time_to_eat);
            //$coll = collect($timee);
             if ($timee > 60) {
-                return ['gg'=>1,$timee];
+                return [$timee,'gg'=>1];
             } else {
-                return ['gg'=>2,$timee];
+                return [$timee,'gg'=>2];
             }
         } catch (\Exception $e) {
             return Response()->json($e->getMessage(), 400);
