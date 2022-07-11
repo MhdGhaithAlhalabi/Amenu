@@ -96,7 +96,7 @@ class OrderController extends Controller
                 'status' => 'waiting'
             ]);
             $text = 'new order';
-            event(new orderStore($text));/////all
+            event(new orderStore($text));
             if ($amount > 100000) {
                 $customer = Customer::find($customer_id);
                 $point = $customer->points + intval($amount / 100000);
@@ -123,13 +123,14 @@ class OrderController extends Controller
                     ]
                 );
             }
+
             $time_to_eat = Cart::where('status', '=', 'waiting')->avg('time');
            $timee = intval($time_to_eat);
            //$coll = collect($timee);
             if ($timee > 60) {
                 return $timee;
             } else {
-                return $timee;
+                return 255;
             }
         } catch (\Exception $e) {
             return Response()->json($e->getMessage(), 400);
