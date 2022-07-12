@@ -66,26 +66,16 @@ class OrderController extends Controller
                 $priceSale = Product::find($product_id)->priceSale;
                 $time = Product::find($product_id)->time;
                 $qtu = $collection[$i]['qty'];
-                if ($points == 0 || $points == NULL) {
                     if ($priceSale == NULL) {
                         $c_price = $c_price + $price * $qtu;
                     } else {
                         $c_price = $c_price + $priceSale * $qtu;
-                    }
-                } else {
-                    if ($priceSale == NULL) {
-                        $c_price = $c_price + $price * $qtu;
-                        $c_price = $c_price - $points * 5000;
-                    } else {
-                        $c_price = $c_price + $priceSale * $qtu;
-                        $c_price = $c_price - $points * 5000;
                     }
 
-                }
                 $c_time = $c_time + $time * $qtu;
             }
             $customer_id = $request->customerId;
-            $amount = $c_price;
+            $amount = $c_price - $points * 5000;
             $time = $c_time;
             $table_number = $request->table;
 
