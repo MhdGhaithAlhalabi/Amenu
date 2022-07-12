@@ -75,10 +75,19 @@ class OrderController extends Controller
                 $c_time = $c_time + $time * $qtu;
             }
             $customer_id = $request->customerId;
-            $amount = $c_price - $points * 5000;
             $time = $c_time;
+            if($points == 0) {
+                $amount = $c_price;
+            }
             $table_number = $request->table;
-
+            if($points != 0){
+                $amount = $c_price - $points * 5000;
+                $customer = Customer::find($customer_id);
+                $pp=$customer->points;
+                $point = $pp - $points;
+                $customer->points = $point;
+                $customer->save();
+            }
             $cart = Cart::create([
                 'customer_id' => $customer_id,
                 'amount' => $amount,
