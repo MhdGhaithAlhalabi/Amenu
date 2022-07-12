@@ -100,7 +100,8 @@ class OrderController extends Controller
             event(new orderStore($text));
             if ($amount > 100000) {
                 $customer = Customer::find($customer_id);
-                $point = $customer->points + intval($amount / 100000);
+                $pp=$customer->points;
+                $point = $pp + intval($amount / 100000);
                 $customer->points = $point;
                 $customer->save();
             }
@@ -127,7 +128,7 @@ class OrderController extends Controller
 
             $time_to_eat = Cart::where('status', '=', 'waiting')->avg('time');
             $timee = intval($time_to_eat);
-            if ($timee > 60) {
+            if ($timee > 30 && $amount > 50000) {
                 $gift = Gift::where('active', '=', '1')->first();
                 $gift_id = $gift->id;
                 $gift_count = $gift->count;
