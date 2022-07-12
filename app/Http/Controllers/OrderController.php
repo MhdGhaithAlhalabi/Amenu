@@ -154,10 +154,14 @@ class OrderController extends Controller
 //        $gift_to = Gift::find($gift_id);
 //        $gift_to->update(['count' => $gift_count + 1]);
 //        return ['gift'=>$gift,'time'=> $timee];
-        $carts = Cart::all();
-        foreach ($carts as $cart){
-            $cart->delete();
-        }
+
+//        $carts = Cart::all();
+//        foreach ($carts as $cart){
+//            $cart->delete();
+//        }
+
+        $order= Order::all();
+        return $order;
 
     }
 
