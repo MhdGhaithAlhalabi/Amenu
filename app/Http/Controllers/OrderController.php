@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\orderStore;
 use App\Models\Cart;
 use App\Models\Customer;
+use App\Models\Gift;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -125,24 +126,36 @@ class OrderController extends Controller
             }
 
             $time_to_eat = Cart::where('status', '=', 'waiting')->avg('time');
-           $timee = intval($time_to_eat);
-           //$coll = collect($timee);
+            $timee = intval($time_to_eat);
             if ($timee > 60) {
-                return $timee;
+                $gift = Gift::where('active', '=', '1')->first();
+                $gift_id = $gift->id;
+                $gift_count = $gift->count;
+                $gift_to = Gift::find($gift_id);
+                $gift_to->update(['count' => $gift_count + 1]);
+                return ['gift'=>$gift,'time'=> $timee];
             } else {
-                return $timee;
+                return ['time'=>$timee];
             }
         } catch (\Exception $e) {
             return Response()->json($e->getMessage(), 400);
         }
 
     }
-public function teeest(){
-    $time_to_eat = Cart::where('status', '=', 'waiting')->avg('time');
-    $timee = intval($time_to_eat);
 
-    return $timee;
-}
+    public function teeest()
+    {
+        $time_to_eat = Cart::where('status', '=', 'waiting')->avg('time');
+        $timee = intval($time_to_eat);
+        $gift = Gift::where('active', '=', '1')->first();
+        $gift_id = $gift->id;
+        $gift_count = $gift->count;
+        $gift_to = Gift::find($gift_id);
+        $gift_to->update(['count' => $gift_count + 1]);
+        return ['gift'=>$gift,'time'=> $timee];
+
+    }
+
     /**
      * Display the specified resource.
      *
