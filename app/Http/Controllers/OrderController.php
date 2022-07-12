@@ -136,7 +136,7 @@ class OrderController extends Controller
                 $gift_to->update(['count' => $gift_count + 1]);
                 return ['gift'=>$gift,'time'=> $timee];
             } else {
-                return ['time'=>$timee];
+                return ['gift'=>"",'time'=>$timee];
             }
         } catch (\Exception $e) {
             return Response()->json($e->getMessage(), 400);

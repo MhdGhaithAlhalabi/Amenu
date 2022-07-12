@@ -85,7 +85,6 @@ class CartController extends Controller
     {
 
         $carts = Cart::with('order:cart_id,qtu,product_id', 'order.product:id,name,image,details,price,priceSale,status,time,rate,type_id', 'order.product.type:id,name')->where('customer_id', '=', $customer_id)->latest()->take(3)->get();
-
         return $carts;
     }
 
