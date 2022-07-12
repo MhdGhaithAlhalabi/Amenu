@@ -145,10 +145,13 @@ class OrderController extends Controller
 //        $gift_to->update(['count' => $gift_count + 1]);
 //        return ['gift'=>$gift,'time'=> $timee];
 try {
-    $carts = Cart::all();
-    foreach ($carts as $cart) {
-        $cart->delete();
-    }
+    $customer = Customer::find(11);
+    $amount= "194500";
+    $pp=$customer->points;
+    $point = $pp + intval($amount / 100000);
+    $customer->points = $point;
+    $customer->save();
+
        } catch (\Exception $e)
 {
 return Response()->json($e->getMessage(), 400);
