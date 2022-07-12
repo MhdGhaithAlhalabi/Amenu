@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Gift;
 use App\Models\Order;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use function Symfony\Component\String\length;
@@ -66,24 +67,24 @@ class OrderController extends Controller
                 $priceSale = Product::find($product_id)->priceSale;
                 $time = Product::find($product_id)->time;
                 $qtu = $collection[$i]['qty'];
-                    if ($priceSale == NULL) {
-                        $c_price = $c_price + $price * $qtu;
-                    } else {
-                        $c_price = $c_price + $priceSale * $qtu;
-                    }
+                if ($priceSale == NULL) {
+                    $c_price = $c_price + $price * $qtu;
+                } else {
+                    $c_price = $c_price + $priceSale * $qtu;
+                }
 
                 $c_time = $c_time + $time * $qtu;
             }
             $customer_id = $request->customerId;
             $time = $c_time;
-            if($points == 0) {
+            if ($points == 0) {
                 $amount = $c_price;
             }
             $table_number = $request->table;
-            if($points != 0){
+            if ($points != 0) {
                 $amount = $c_price - $points * 5000;
                 $customer = Customer::find($customer_id);
-                $pp=$customer->points;
+                $pp = $customer->points;
                 $point = $pp - $points;
                 $customer->points = $point;
                 $customer->save();
@@ -99,7 +100,7 @@ class OrderController extends Controller
             event(new orderStore($text));
             if ($amount > 100000) {
                 $customer = Customer::find($customer_id);
-                $pp=$customer->points;
+                $pp = $customer->points;
                 $point = $pp + intval($amount / 100000);
                 $customer->points = $point;
                 $customer->save();
@@ -133,9 +134,9 @@ class OrderController extends Controller
                 $gift_count = $gift->count;
                 $gift_to = Gift::find($gift_id);
                 $gift_to->update(['count' => $gift_count + 1]);
-                return ['gift'=>$gift,'time'=> $timee];
+                return ['gift' => $gift, 'time' => $timee];
             } else {
-                return ['gift'=>"",'time'=>$timee];
+                return ['gift' => NULL, 'time' => $timee];
             }
         } catch (\Exception $e) {
             return Response()->json($e->getMessage(), 400);
@@ -153,45 +154,123 @@ class OrderController extends Controller
 //        $gift_to = Gift::find($gift_id);
 //        $gift_to->update(['count' => $gift_count + 1]);
 //        return ['gift'=>$gift,'time'=> $timee];
-try {
+        try {
 //    $customer = Customer::find(11);
 //    $amount= "194500";
 //    $pp=$customer->points;
 //    $point = $pp + intval($amount / 100000);
 //    $customer->points = $point;
 //    $customer->save();
-      $carts1 = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
-        ->join('products', 'products.id', '=', 'orders.product_id')
-        ->join('types', 'types.id', '=', 'products.type_id')
-        ->select('types.name', 'orders.qtu', DB::raw("DATE_FORMAT(carts.created_at, '%d-%m-%Y') as date"))//b
-        ->where('carts.created_at', '>', now()->subMonth())
-        //->orderby('types.name')
-    ->pluck('date');
-        //->get();
-    return  $carts2 = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
-        ->join('products', 'products.id', '=', 'orders.product_id')
-        ->join('types', 'types.id', '=', 'products.type_id')
-        ->select('types.name','orders.qtu', DB::raw("DATE_FORMAT(carts.created_at, '%d-%m-%Y') as date"),'')//b
-        ->where('carts.created_at', '>', now()->subMonth())
-        //->orderby('types.name')
-            ->groupby('date','types.name','orders.qtu')
-        ->get();
-       // ->pluck('types.name');
-////FORMAT (getdate(), 'd', 'en-US') as date
-    $carts = Cart::where('created_at', '>', now()->subMonth())
-        ->get();
-    $x = collect($carts1)->groupBy(function ($item) {
-        return $item->created_at->format('Y-m-d');
-    });
-    $xx = collect($carts1)->groupBy('name');
-    $x2 = collect($x)->sortBy('name');
-    $total = $carts->sum('amount');
-    return ['report' => $x, 'r2' => $xx, 'total' => $total];
+//
+//               $orders = Order::with('product')
+//                ->where('created_at', '>', now()->subMonth())
+//                ->get();
+//
+//            $z = collect($orders);
+//             $zz = $z->groupBy(function ($item){
+//               return $item->created_at->format('Y-m-d');
+//           });
+//             $gg = [];
+//             foreach ($zz as $z){
+//                $gh= collect($z)->groupBy(function ($item){
+//                     return $item->product->name;
+//                 });
+//                     array_push($gg, [
+//                         'name' => $z->product->name,
+//                         'his' => '',
+//                     ]);
+//             }
+//
+//            return $gg;
 
-       } catch (\Exception $e)
-{
-return Response()->json($e->getMessage(), 400);
-}
+//                   $zz2 = $z->groupBy(function ($item){
+//                return $item->product->name;
+//            });
+//            $itemsArray = [];
+//            foreach ($z as $item){
+//                array_push($itemsArray,[
+//                    'name' => $item->product->name,
+//                ]);
+//            }
+            //  $itemsArray ;
+
+//            $orders->transform(function ($order) {
+//                $itemsArray = [];
+//                $order['product'] = $order['product']->groupBy(function ($item){
+//                    return $item->product->name;
+//                })->map(function ($item) use ($itemsArray) {
+//                    array_push($itemsArray, [
+//                        'name' => $item[0]['name'],
+//                        'qtu' => $item->sum('qtu'),
+//                    ]);
+//                    return $itemsArray[0];
+//                })->values();
+//                return $order;
+//            });
+
+
+            $carts1 = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
+                ->join('products', 'products.id', '=', 'orders.product_id')
+                ->join('types', 'types.id', '=', 'products.type_id')
+                ->select('types.name', 'orders.qtu', DB::raw("DATE_FORMAT(carts.created_at, '%d-%m-%Y') as date"))//b
+                ->where('carts.created_at', '>', now()->subMonth())
+                ->orderby('types.name')
+                ->get();
+//             $carts2 = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
+//                ->join('products', 'products.id', '=', 'orders.product_id')
+//                ->join('types', 'types.id', '=', 'products.type_id')
+//                ->select('types.name', 'orders.qtu', DB::raw("DATE_FORMAT(carts.created_at, '%d-%m-%Y') as date"), '')//b
+//                ->where('carts.created_at', '>', now()->subMonth())
+//                //->orderby('types.name')
+//                ->groupby('date', 'types.name', 'orders.qtu')
+//                ->get();
+            // ->pluck('types.name');
+////FORMAT (getdate(), 'd', 'en-US') as date
+            $carts = Cart::where('created_at', '>', now()->subMonth())
+                ->get();
+            $x = collect($carts1)->groupBy('date');
+            $s = $x->values();
+            $ss = $s->toArray();
+            $orders = Order::join('products', 'products.id', '=', 'orders.product_id')
+                ->select('products.name as name', 'orders.qtu as qtu', DB::raw("DATE_FORMAT(orders.created_at, '%d-%m-%Y') as date"))
+                ->groupBy('qtu', 'name', 'date')
+                ->get();
+
+
+
+                $itemsArray = [];
+                $order = $orders->groupby('name')->map(function ($item) use ($itemsArray) {
+                    array_push($itemsArray, [
+                        'name' => $item[0]['name'],
+                        'qtu'=> $item->sum('qtu')
+                    ]);
+                    return $itemsArray[0];
+                })->values();
+
+          return $order;
+
+
+
+//                $arr=[];
+//                foreach ($orders as $order){
+//                    array_push($arr,[
+//                        'name'=> $order->name,
+//                        'qty'=> $order->qtu,
+//                        'date'=> $order->date
+//                    ]);
+//                }
+//               return collect($arr)->map();
+//               $data = $carts1->selectRaw('sum(qtu) as quantity')
+//                ->groupBy('name','date')
+//                ->get();
+          //  $xx = collect($carts1)->groupBy('name');
+       //     $x2 = collect($x)->sortBy('name');
+        //    $total = $carts->sum('amount');
+         //   return ['report' => $x, 'r2' => $xx, 'total' => $total];
+
+        } catch (\Exception $e) {
+            return Response()->json($e->getMessage(), 400);
+        }
         return Response()->json('cart and order Deleted', 200);
 
 //        $order= Order::all();
