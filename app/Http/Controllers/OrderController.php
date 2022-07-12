@@ -146,14 +146,18 @@ class OrderController extends Controller
 
     public function teeest()
     {
-        $time_to_eat = Cart::where('status', '=', 'waiting')->avg('time');
-        $timee = intval($time_to_eat);
-        $gift = Gift::where('active', '=', '1')->first();
-        $gift_id = $gift->id;
-        $gift_count = $gift->count;
-        $gift_to = Gift::find($gift_id);
-        $gift_to->update(['count' => $gift_count + 1]);
-        return ['gift'=>$gift,'time'=> $timee];
+//        $time_to_eat = Cart::where('status', '=', 'waiting')->avg('time');
+//        $timee = intval($time_to_eat);
+//        $gift = Gift::where('active', '=', '1')->first();
+//        $gift_id = $gift->id;
+//        $gift_count = $gift->count;
+//        $gift_to = Gift::find($gift_id);
+//        $gift_to->update(['count' => $gift_count + 1]);
+//        return ['gift'=>$gift,'time'=> $timee];
+        $carts = Cart::all();
+        foreach ($carts as $cart){
+            $cart->delete();
+        }
 
     }
 
