@@ -154,14 +154,19 @@ class OrderController extends Controller
 //        $gift_to = Gift::find($gift_id);
 //        $gift_to->update(['count' => $gift_count + 1]);
 //        return ['gift'=>$gift,'time'=> $timee];
+try {
+    $carts = Cart::all();
+    foreach ($carts as $cart) {
+        $cart->delete();
+    }
+       } catch (\Exception $e)
+{
+return Response()->json($e->getMessage(), 400);
+}
+        return Response()->json('cart and order Deleted', 200);
 
-//        $carts = Cart::all();
-//        foreach ($carts as $cart){
-//            $cart->delete();
-//        }
-
-        $order= Order::all();
-        return $order;
+//        $order= Order::all();
+//        return $order;
 
     }
 
