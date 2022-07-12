@@ -125,7 +125,7 @@ class OrderController extends Controller
                 );
             }
 
-            $time_to_eat = Cart::where('status', '=', 'waiting')->avg('time');
+            $time_to_eat = Cart::where('status', '=', 'waiting')->sum('time');
             $timee = intval($time_to_eat);
             if ($timee > 30 && $amount > 50000) {
                 $gift = Gift::where('active', '=', '1')->first();
@@ -154,12 +154,39 @@ class OrderController extends Controller
 //        $gift_to->update(['count' => $gift_count + 1]);
 //        return ['gift'=>$gift,'time'=> $timee];
 try {
-    $customer = Customer::find(11);
-    $amount= "194500";
-    $pp=$customer->points;
-    $point = $pp + intval($amount / 100000);
-    $customer->points = $point;
-    $customer->save();
+//    $customer = Customer::find(11);
+//    $amount= "194500";
+//    $pp=$customer->points;
+//    $point = $pp + intval($amount / 100000);
+//    $customer->points = $point;
+//    $customer->save();
+      $carts1 = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
+        ->join('products', 'products.id', '=', 'orders.product_id')
+        ->join('types', 'types.id', '=', 'products.type_id')
+        ->select('types.name', 'orders.qtu', DB::raw("DATE_FORMAT(carts.created_at, '%d-%m-%Y') as date"))//b
+        ->where('carts.created_at', '>', now()->subMonth())
+        //->orderby('types.name')
+    ->pluck('date');
+        //->get();
+    return  $carts2 = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
+        ->join('products', 'products.id', '=', 'orders.product_id')
+        ->join('types', 'types.id', '=', 'products.type_id')
+        ->select('types.name','orders.qtu', DB::raw("DATE_FORMAT(carts.created_at, '%d-%m-%Y') as date"),'')//b
+        ->where('carts.created_at', '>', now()->subMonth())
+        //->orderby('types.name')
+            ->groupby('date','types.name','orders.qtu')
+        ->get();
+       // ->pluck('types.name');
+////FORMAT (getdate(), 'd', 'en-US') as date
+    $carts = Cart::where('created_at', '>', now()->subMonth())
+        ->get();
+    $x = collect($carts1)->groupBy(function ($item) {
+        return $item->created_at->format('Y-m-d');
+    });
+    $xx = collect($carts1)->groupBy('name');
+    $x2 = collect($x)->sortBy('name');
+    $total = $carts->sum('amount');
+    return ['report' => $x, 'r2' => $xx, 'total' => $total];
 
        } catch (\Exception $e)
 {
