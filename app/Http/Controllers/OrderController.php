@@ -302,7 +302,7 @@ class OrderController extends Controller
 //                ->get();
 
 
-                return['report'=> $purchases];
+                return $purchases;
 
 
 
