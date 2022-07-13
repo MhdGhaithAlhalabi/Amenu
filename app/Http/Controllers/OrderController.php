@@ -208,14 +208,14 @@ class OrderController extends Controller
 //                return $order;
 //            });
 
-
-            $carts1 = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
-                ->join('products', 'products.id', '=', 'orders.product_id')
-                ->join('types', 'types.id', '=', 'products.type_id')
-                ->select('types.name', 'orders.qtu', DB::raw("DATE_FORMAT(carts.created_at, '%d-%m-%Y') as date"))//b
-                ->where('carts.created_at', '>', now()->subMonth())
-                ->orderby('types.name')
-                ->get();
+//
+//            $carts1 = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
+//                ->join('products', 'products.id', '=', 'orders.product_id')
+//                ->join('types', 'types.id', '=', 'products.type_id')
+//                ->select('types.name', 'orders.qtu', DB::raw("DATE_FORMAT(carts.created_at, '%d-%m-%Y') as date"))//b
+//                ->where('carts.created_at', '>', now()->subMonth())
+//                ->orderby('types.name')
+//                ->get();
 //             $carts2 = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
 //                ->join('products', 'products.id', '=', 'orders.product_id')
 //                ->join('types', 'types.id', '=', 'products.type_id')
@@ -226,29 +226,29 @@ class OrderController extends Controller
 //                ->get();
             // ->pluck('types.name');
 ////FORMAT (getdate(), 'd', 'en-US') as date
-            $carts = Cart::where('created_at', '>', now()->subMonth())
-                ->get();
-            $x = collect($carts1)->groupBy('date');
-            $s = $x->values();
-            $ss = $s->toArray();
-            $orders = Order::join('products', 'products.id', '=', 'orders.product_id')
-                ->select('products.name as name', 'orders.qtu as qtu', DB::raw("DATE_FORMAT(orders.created_at, '%d-%m-%Y') as date"))
-                ->groupBy('qtu', 'name', 'date')
-                ->get();
-
-
-
-                $itemsArray = [];
-                $order = $orders->groupby('name')->map(function ($item) use ($itemsArray) {
-                    array_push($itemsArray, [
-                        'name' => $item[0]['name'],
-                        'qtu'=> $item->sum('qtu')
-                    ]);
-                    return $itemsArray[0];
-                })->values();
-
-          return $order;
-
+//            $carts = Cart::where('created_at', '>', now()->subMonth())
+//                ->get();
+//            $x = collect($carts1)->groupBy('date');
+//            $s = $x->values();
+//            $ss = $s->toArray();
+//            $orders = Order::join('products', 'products.id', '=', 'orders.product_id')
+//                ->select('products.name as name', 'orders.qtu as qtu', DB::raw("DATE_FORMAT(orders.created_at, '%d-%m-%Y') as date"))
+//               ->where('orders.created_at', '>', now()->subMonth())
+//                ->get();
+//
+//
+//
+//                $itemsArray = [];
+//                $order = $orders->groupby('date','name')->map(function ($item) use ($itemsArray) {
+//                    array_push($itemsArray, [
+//                        'orders' => $item,
+//                        'qtu'=> $item->sum('qtu'),
+//                    ]);
+//                    return $itemsArray[0];
+//                })->values();
+//
+//          return collect($order);
+//
 
 
 //                $arr=[];
@@ -268,10 +268,63 @@ class OrderController extends Controller
         //    $total = $carts->sum('amount');
          //   return ['report' => $x, 'r2' => $xx, 'total' => $total];
 
+
+
+
+
+
+
+
+//             $carts = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
+//                ->join('products', 'products.id', '=', 'orders.product_id')
+//                ->join('types', 'types.id', '=', 'products.type_id')
+//                ->select(DB::raw("sum(orders.qtu) as sum") , DB::raw("DATE_FORMAT(carts.created_at, '%d-%m-%Y') as date"), '')//b
+//                ->where('carts.created_at', '>', now()->subMonth())
+//                 ->where('types.name','=','لحم')
+//                ->groupby('date', 'sum')
+//                ->get();
+               $product_id =  Product::all()->pluck('id');
+            $purchases = DB::table('orders')
+                ->join('products', 'products.id', '=', 'orders.product_id')
+             ->select('products.name', DB::raw("DATE_FORMAT(orders.created_at, '%d-%m-%Y') as date"),DB::raw('SUM(orders.qtu) AS sum'))
+              ->distinct()
+              ->where('orders.created_at', '>', now()->subMonth())
+             ->whereIn('products.id',$product_id)
+             ->groupBy('orders.created_at','products.name')
+             ->get();
+            $purchases2 = DB::table('orders')
+                ->join('products', 'products.id', '=', 'orders.product_id')
+                ->select( DB::raw("DATE_FORMAT(orders.created_at, '%d-%m-%Y') as date"))
+                ->distinct()
+                ->where('orders.created_at', '>', now()->subMonth())
+                ->whereIn('products.id',$product_id)
+                ->groupBy('orders.created_at','products.name')
+                ->get();
+
+
+                return['report'=> $purchases,'history'=>$purchases2];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         } catch (\Exception $e) {
             return Response()->json($e->getMessage(), 400);
         }
-        return Response()->json('cart and order Deleted', 200);
+        return Response()->json('test done', 200);
 
 //        $order= Order::all();
 //        return $order;
