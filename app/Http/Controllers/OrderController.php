@@ -286,7 +286,7 @@ class OrderController extends Controller
                $product_id =  Product::all()->pluck('id');
             $purchases = DB::table('orders')
                 ->join('products', 'products.id', '=', 'orders.product_id')
-             ->select('products.name', DB::raw("to_date(cast(orders.created_at,'YYYY-MM-DD') as date"),DB::raw('SUM(orders.qtu) AS sum'))
+             ->select('products.name', DB::raw("to_date(cast(orders.created_at,'%d.%m.%Y') as date"),DB::raw('SUM(orders.qtu) AS sum'))
               ->distinct()
               ->where('orders.created_at', '>', now()->subMonth())
              ->whereIn('products.id',$product_id)
@@ -294,7 +294,7 @@ class OrderController extends Controller
              ->get();
             $purchases2 = DB::table('orders')
                 ->join('products', 'products.id', '=', 'orders.product_id')
-                ->select( DB::raw("to_date(cast(orders.created_at,'YYYY-MM-DD') as date"))
+                ->select( DB::raw("to_date(cast(orders.created_at,'%d.%m.%Y') as date"))
                 ->distinct()//"STR_TO_DATE(date, '%m/%d/%Y') as date_format"
                 ->where('orders.created_at', '>', now()->subMonth())
                 ->whereIn('products.id',$product_id)
