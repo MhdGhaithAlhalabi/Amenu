@@ -292,17 +292,17 @@ class OrderController extends Controller
              ->whereIn('products.id',$product_id)
              ->groupBy('orders.created_at','products.name')
              ->get();
-            $purchases2 = DB::table('orders')
-                ->join('products', 'products.id', '=', 'orders.product_id')
-                ->select( DB::raw("DATE_FORMAT(orders.created_at, '%d-%m-%Y') as date"))
-                ->distinct()
-                ->where('orders.created_at', '>', now()->subMonth())
-                ->whereIn('products.id',$product_id)
-                ->groupBy('orders.created_at','products.name')
-                ->get();
+//            $purchases2 = DB::table('orders')
+//                ->join('products', 'products.id', '=', 'orders.product_id')
+//                ->select( DB::raw("DATE_FORMAT(orders.created_at,'%d-%m-%Y') as date"))
+//                ->distinct()
+//                ->where('orders.created_at', '>', now()->subMonth())
+//                ->whereIn('products.id',$product_id)
+//                ->groupBy('orders.created_at','products.name')
+//                ->get();
 
 
-                return['report'=> $purchases,'history'=>$purchases2];
+                return['report'=> $purchases];
 
 
 
