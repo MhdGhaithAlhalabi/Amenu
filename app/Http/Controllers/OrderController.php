@@ -286,7 +286,7 @@ class OrderController extends Controller
                $product_id =  Product::all()->pluck('id');
             $purchases = DB::table('orders')
                 ->join('products', 'products.id', '=', 'orders.product_id')
-             ->select('products.name', DB::raw("DATE_FORMAT(orders.created_at, '%d-%m-%Y') as date"),DB::raw('SUM(orders.qtu) AS sum'))
+             ->select('products.name', DB::raw("STR_TO_DATE(orders.created_at, '%d-%m-%Y') as date"),DB::raw('SUM(orders.qtu) AS sum'))
               ->distinct()
               ->where('orders.created_at', '>', now()->subMonth())
              ->whereIn('products.id',$product_id)
@@ -294,13 +294,13 @@ class OrderController extends Controller
              ->get();
             $purchases2 = DB::table('orders')
                 ->join('products', 'products.id', '=', 'orders.product_id')
-                ->select( DB::raw("DATE_FORMAT(orders.created_at, '%d-%m-%Y') as date"))
-                ->distinct()
+                ->select( DB::raw("STR_TO_DATE(orders.created_at, '%d-%m-%Y') as date"))
+                ->distinct()//"STR_TO_DATE(date, '%m/%d/%Y') as date_format"
                 ->where('orders.created_at', '>', now()->subMonth())
                 ->whereIn('products.id',$product_id)
                 ->groupBy('orders.created_at','products.name')
                 ->get();
-
+          //  to_date(cast(createddate as TEXT),'YYYY-MM-DD')
 
                 return['report'=> $purchases,'history'=>$purchases2];
 
