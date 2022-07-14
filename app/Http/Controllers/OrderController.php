@@ -114,14 +114,14 @@ class OrderController extends Controller
             for ($i = 0; $i < $collection->count(); $i++) {
                 $p = $collection[$i]['id'];
                 $q = $collection[$i]['qty'];
-                // $m = $collection[$i]['message'];
+                $m = $collection[$i]['message'];
 
                 Order::create(
                     [
                         'product_id' => $p,
                         'cart_id' => $cart_id,
                         'qtu' => $q,
-                        'message' => "",
+                        'message' => $m,
                     ]
                 );
             }
