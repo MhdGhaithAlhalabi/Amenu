@@ -290,7 +290,7 @@ class OrderController extends Controller
               ->distinct()
               ->where('orders.created_at', '>', now()->subMonth())
              ->whereIn('products.id',$product_id)
-             ->groupBy('orders.created_at','products.name')
+             ->groupBy('date','products.name')
              ->get();
 //            $purchases2 = DB::table('orders')
 //                ->join('products', 'products.id', '=', 'orders.product_id')
