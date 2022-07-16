@@ -292,6 +292,7 @@ class OrderController extends Controller
              ->whereIn('products.id',$product_id)
              ->groupBy('date','products.name')
              ->get();
+            
 //            $purchases2 = DB::table('orders')
 //                ->join('products', 'products.id', '=', 'orders.product_id')
 //                ->select( DB::raw("DATE_FORMAT(orders.created_at,'%d-%m-%Y') as date"))
