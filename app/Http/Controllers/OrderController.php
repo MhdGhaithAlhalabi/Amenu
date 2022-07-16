@@ -286,7 +286,7 @@ class OrderController extends Controller
                $product_id =  Product::all()->pluck('id');
             $purchases = DB::table('orders')
                 ->join('products', 'products.id', '=', 'orders.product_id')
-             ->select('products.name', DB::raw("to_date(cast(orders.created_at as text), 'D') as date"),DB::raw('SUM(orders.qtu) AS sum'))
+             ->select('products.name', DB::raw("to_date(cast(orders.created_at as text), 'ID') as date"),DB::raw('SUM(orders.qtu) AS sum'))
               ->distinct()
               ->where('orders.created_at',  Carbon::now()->month)
              ->whereIn('products.id',$product_id)
