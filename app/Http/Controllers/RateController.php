@@ -44,7 +44,7 @@ class RateController extends Controller
         $collection = collect($rate);
 
         for ($i = 0; $i < $collection->count(); $i++) {
-            $p = $collection[$i]['product_id'];
+            $p = $collection[$i]['id'];
             $r = $collection[$i]['rate'];
             $r1 = Rate::where('customer_id', '=', $customerId)->where('product_id', '=', $r)->first();
             if ($r == NULL) {
