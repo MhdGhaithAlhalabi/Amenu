@@ -341,7 +341,7 @@ public function t(){
              ->distinct()
              ->whereMonth('orders.created_at', '=',  Carbon::now()->month)
                 ->groupBy('products.id')
-                ->limit(3)
+                ->limit(2)
                 ->orderBy('sum', 'desc')
                 ->pluck('id');
     $purchases = DB::table('orders')
