@@ -335,7 +335,7 @@ class OrderController extends Controller
     }
 public function t(){
         try{
-         return   $user_info = DB::table('orders')
+            $product_id = DB::table('orders')
                 ->join('products', 'products.id', '=', 'orders.product_id')
              ->select('products.id',DB::raw('SUM(orders.qtu) AS sum'))
              ->distinct()
@@ -344,7 +344,6 @@ public function t(){
                 ->limit(3)
                 ->orderBy('sum', 'desc')
                 ->pluck('id');
-    $product_id =  Product::all()->pluck('id');
     $purchases = DB::table('orders')
         ->join('products', 'products.id', '=', 'orders.product_id')
         ->select('products.name', DB::raw("to_char(orders.created_at, 'HH24') as date"),DB::raw('SUM(orders.qtu) AS sum'))
