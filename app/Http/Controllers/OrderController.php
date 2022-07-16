@@ -333,7 +333,27 @@ class OrderController extends Controller
 //        return $order;
 
     }
+public function t(){
+        try{
+    $product_id =  Product::all()->pluck('id');
+    $purchases = DB::table('orders')
+        ->join('products', 'products.id', '=', 'orders.product_id')
+        ->select('products.name', DB::raw("to_date(cast(orders.created_at as text), 'YYYY MM DD HH') as date"),DB::raw('SUM(orders.qtu) AS sum'))
+        ->distinct()
+        // ->where('orders.created_at',  Carbon::now()->month)
+        ->whereDay('orders.created_at', '=',  Carbon::now()->day)
+        ->whereIn('products.id',$product_id)
+        ->groupBy('date','products.name')
+        ->get();
 
+    return $purchases;
+
+} catch (\Exception $e) {
+return Response()->json($e->getMessage(), 400);
+}
+return Response()->json('test done', 200);
+
+}
     /**
      * Display the specified resource.
      *

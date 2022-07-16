@@ -88,6 +88,8 @@ Route::post('/customerStore', [CustomerController::class, 'Store']);//flutter
 Route::post('/orderStore', [OrderController::class, 'Store']);//flutter
 Route::post('/testList', [OrderController::class, 'testList']);//flutter
 Route::get('/teeest', [OrderController::class, 'teeest']);//flutterteeest
+Route::get('/t', [OrderController::class, 't']);//flutterteeest
+
 
 //CART CONTROLLER
 Route::get('/orderCustomerView/{customer_id}', [CartController::class, 'index2']);//flutter
