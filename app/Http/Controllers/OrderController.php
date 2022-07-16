@@ -338,7 +338,7 @@ public function t(){
     $product_id =  Product::all()->pluck('id');
     $purchases = DB::table('orders')
         ->join('products', 'products.id', '=', 'orders.product_id')
-        ->select('products.name', DB::raw("to_char(orders.created_at, 'HH24') as date"),DB::raw('SUM(orders.qtu) AS sum'))
+        ->select('products.name', DB::raw("to_char(orders.created_at, 'DD') as date"),DB::raw('SUM(orders.qtu) AS sum'))
         ->distinct()
         // ->where('orders.created_at',  Carbon::now()->month)
         ->whereDay('orders.created_at', '=',  Carbon::now()->day)
