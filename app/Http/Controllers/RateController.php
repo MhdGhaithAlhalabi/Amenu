@@ -38,8 +38,8 @@ class RateController extends Controller
      */
     public function store(Request $request)
     {
-        $rates = $request->rates;
-        $customerId = $request->customerId;
+        $rates = $request->rateList;
+        $customerId = $request->customer_id;
         $rate = json_decode($rates, true);
         $collection = collect($rate);
 
