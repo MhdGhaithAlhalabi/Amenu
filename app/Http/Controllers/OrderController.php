@@ -283,7 +283,16 @@ class OrderController extends Controller
 //                 ->where('types.name','=','لحم')
 //                ->groupby('date', 'sum')
 //                ->get();
-               $product_id =  Product::all()->pluck('id');
+           //    $product_id =  Product::all()->pluck('id');
+                        $product_id = DB::table('orders')
+                ->join('products', 'products.id', '=', 'orders.product_id')
+             ->select('products.id',DB::raw('SUM(orders.qtu) AS sum'))
+             ->distinct()
+             ->whereMonth('orders.created_at', '=',  Carbon::now()->month)
+                ->groupBy('products.id')
+                ->limit(3)
+                ->orderBy('sum', 'desc')
+                ->pluck('id');
             $purchases = DB::table('orders')
                 ->join('products', 'products.id', '=', 'orders.product_id')
              ->select('products.name', DB::raw("to_date(cast(orders.created_at as text), 'YYYY MM DD') as date"),DB::raw('SUM(orders.qtu) AS sum'))
@@ -306,23 +315,7 @@ class OrderController extends Controller
 
                 return $purchases;
 
-
-
-
-
             //->orderby('types.name')
-
-
-
-
-
-
-
-
-
-
-
-
 
         } catch (\Exception $e) {
             return Response()->json($e->getMessage(), 400);
@@ -335,13 +328,22 @@ class OrderController extends Controller
     }
 public function t(){
         try{
+//            $product_id = DB::table('orders')
+//                ->join('products', 'products.id', '=', 'orders.product_id')
+//             ->select('products.id',DB::raw('SUM(orders.qtu) AS sum'))
+//             ->distinct()
+//             ->whereMonth('orders.created_at', '=',  Carbon::now()->month)
+//                ->groupBy('products.id')
+//                ->limit(3)
+//                ->orderBy('sum', 'desc')
+//                ->pluck('id');
             $product_id = DB::table('orders')
                 ->join('products', 'products.id', '=', 'orders.product_id')
-             ->select('products.id',DB::raw('SUM(orders.qtu) AS sum'))
-             ->distinct()
-             ->whereMonth('orders.created_at', '=',  Carbon::now()->month)
+                ->select('products.id',DB::raw('SUM(orders.qtu) AS sum'))
+                ->distinct()
+                ->whereDay('orders.created_at', '=',  Carbon::now()->day)
                 ->groupBy('products.id')
-                ->limit(2)
+                ->limit(3)
                 ->orderBy('sum', 'desc')
                 ->pluck('id');
     $purchases = DB::table('orders')
