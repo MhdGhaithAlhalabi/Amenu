@@ -337,10 +337,10 @@ public function t(){
         try{
          return   $user_info = DB::table('orders')
                 ->join('products', 'products.id', '=', 'orders.product_id')
-             ->select('products.name', DB::raw("to_date(cast(orders.created_at as text), 'YYYY MM DD') as date"),DB::raw('SUM(orders.qtu) AS sum'))
+             ->select('products.id',DB::raw('SUM(orders.qtu) AS sum'))
              ->distinct()
              ->whereMonth('orders.created_at', '=',  Carbon::now()->month)
-                ->groupBy('products.name')
+                ->groupBy('products.id')
                 ->limit(3)
                 ->orderBy('sum', 'desc')
                 ->get();
