@@ -343,7 +343,7 @@ public function t(){
                 ->groupBy('products.id')
                 ->limit(3)
                 ->orderBy('sum', 'desc')
-                ->get();
+                ->pluck('id');
     $product_id =  Product::all()->pluck('id');
     $purchases = DB::table('orders')
         ->join('products', 'products.id', '=', 'orders.product_id')
