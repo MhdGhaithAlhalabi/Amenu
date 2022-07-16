@@ -46,7 +46,7 @@ class RateController extends Controller
         for ($i = 0; $i < $collection->count(); $i++) {
             $p = $collection[$i]['id'];
             $r = $collection[$i]['rate'];
-            $r1 = Rate::where('customer_id', '=', $customerId)->where('product_id', '=', $r)->first();
+            $r1 = Rate::where('customer_id', '=', $customerId)->where('product_id', '=', $p)->first();
             if ($r == NULL) {
                 Rate::create(
                     [
@@ -62,6 +62,7 @@ class RateController extends Controller
             }
             $the_rate = Rate::all()->where('product_id', '=', $p)->average('rate');
             $product = Product::find($p);
+            
             $rate = $the_rate;
             $product->rate = $rate;
             $product->save();
