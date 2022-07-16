@@ -288,7 +288,9 @@ class OrderController extends Controller
                 ->join('products', 'products.id', '=', 'orders.product_id')
              ->select('products.name', DB::raw("to_date(cast(orders.created_at as text), 'YYYY MM DD') as date"),DB::raw('SUM(orders.qtu) AS sum'))
               ->distinct()
-              ->where('orders.created_at',  Carbon::now()->month)
+             // ->where('orders.created_at',  Carbon::now()->month)
+                            ->where('carts.created_at', '>', now()->subMonth())
+
              ->whereIn('products.id',$product_id)
              ->groupBy('date','products.name')
              ->get();
