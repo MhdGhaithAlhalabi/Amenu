@@ -126,7 +126,7 @@ class OrderController extends Controller
                 );
             }
 
-            $time_to_eat = Cart::where('status', '=', 'waiting')->sum('time');
+            $time_to_eat = Cart::where('status', '=', 'waiting')->average('time');
             $timee = intval($time_to_eat);
             if ($timee > 30 && $amount > 50000) {
                 $gift = Gift::where('active', '=', '1')->first();
@@ -288,7 +288,7 @@ class OrderController extends Controller
                 ->join('products', 'products.id', '=', 'orders.product_id')
              ->select('products.name', DB::raw("to_date(cast(orders.created_at as text), 'DD') as date"),DB::raw('SUM(orders.qtu) AS sum'))
               ->distinct()
-              ->where('orders.created_at',  Carbon::now()->month)
+              ->where('date',  Carbon::now()->month)
              ->whereIn('products.id',$product_id)
              ->groupBy('date','products.name')
              ->get();
