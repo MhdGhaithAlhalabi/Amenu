@@ -126,7 +126,7 @@ class OrderController extends Controller
                 );
             }
 
-            $time_to_eat = Cart::where('status', '=', 'waiting')->average('time');
+            $time_to_eat = Cart::where('status', '=', 'waiting')->sum('time');
             $timee = intval($time_to_eat);
             if ($timee > 30 && $amount > 50000) {
                 $gift = Gift::where('active', '=', '1')->first();
