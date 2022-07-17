@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Type;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use function Symfony\Component\Routing\Loader\Configurator\collection;
@@ -90,42 +91,101 @@ class CartController extends Controller
 
     public function dailyReport()
     {
-        $carts1 = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
-            ->join('products', 'products.id', '=', 'orders.product_id')
-            ->join('types', 'types.id', '=', 'products.type_id')
-            ->select('types.name', 'orders.qtu', 'carts.created_at')
-            ->where('carts.created_at', '>', now()->subDay())
-            ->get();
-        $carts = Cart::where('created_at', '>', now()->subDay())
-            ->get();
-        $total = $carts->sum('amount');
-        return ['report' => $carts1, 'total' => $total];
+//        $carts1 = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
+//            ->join('products', 'products.id', '=', 'orders.product_id')
+//            ->join('types', 'types.id', '=', 'products.type_id')
+//            ->select('types.name', 'orders.qtu', 'carts.created_at')
+//            ->where('carts.created_at', '>', now()->subDay())
+//            ->get();
+//        $carts = Cart::where('created_at', '>', now()->subDay())
+//            ->get();
+//        $total = $carts->sum('amount');
+//        return ['report' => $carts1, 'total' => $total];
+        try {
+//            $product_id = DB::table('orders')
+//                ->join('products', 'products.id', '=', 'orders.product_id')
+//             ->select('products.id',DB::raw('SUM(orders.qtu) AS sum'))
+//             ->distinct()
+//             ->whereMonth('orders.created_at', '=',  Carbon::now()->month)
+//                ->groupBy('products.id')
+//                ->limit(3)
+//                ->orderBy('sum', 'desc')
+//                ->pluck('id');
+            $product_id = DB::table('orders')
+                ->join('products', 'products.id', '=', 'orders.product_id')
+                ->select('products.id', DB::raw('SUM(orders.qtu) AS sum'))
+                ->distinct()
+                ->whereDay('orders.created_at', '=', Carbon::now()->day)
+                ->groupBy('products.id')
+                ->limit(3)
+                ->orderBy('sum', 'desc')
+                ->pluck('id');
+            $purchases = DB::table('orders')
+                ->join('products', 'products.id', '=', 'orders.product_id')
+                ->select('products.name', DB::raw("to_char(orders.created_at, 'HH24') as date"), DB::raw('SUM(orders.qtu) AS sum'))
+                ->distinct()
+                // ->where('orders.created_at',  Carbon::now()->month)
+                ->whereDay('orders.created_at', '=', Carbon::now()->day)
+                ->whereIn('products.id', $product_id)
+                ->groupBy('date', 'products.name')
+                ->get();
+
+            return $purchases;
+
+        } catch (\Exception $e) {
+            return Response()->json($e->getMessage(), 400);
+        }
+        return Response()->json('daily report', 200);
     }
 
     public function monthlyReport()
     {
-//        $carts2 = Cart::with('order:cart_id,qtu,product_id','order.product:id,type_id','order.product.type:id,name')
-//            ->where('status','=','waiting')
-//            ->where('carts.created_at','>',now()->subMonth())
+
+//
+//        $carts1 = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
+//            ->join('products', 'products.id', '=', 'orders.product_id')
+//            ->join('types', 'types.id', '=', 'products.type_id')
+//            ->select('types.name', 'orders.qtu', 'carts.created_at')
+//            ->where('carts.created_at', '>', now()->subMonth())
+//            ->orderby('types.name')
 //            ->get();
+//
+//        $carts = Cart::where('created_at', '>', now()->subMonth())
+//            ->get();
+//        $x = collect($carts1)->groupBy(function ($item) {
+//            return $item->created_at->format('Y-m-d');
+//        });
+//        $xx = collect($carts1)->groupBy('name');
+//        $x2 = collect($x)->sortBy('name');
+//        $total = $carts->sum('amount');
+//        return ['report' => $x, 'r2' => $xx, 'total' => $total];
+        try {
 
-        $carts1 = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
-            ->join('products', 'products.id', '=', 'orders.product_id')
-            ->join('types', 'types.id', '=', 'products.type_id')
-            ->select('types.name', 'orders.qtu', 'carts.created_at')
-            ->where('carts.created_at', '>', now()->subMonth())
-            ->orderby('types.name')
-            ->get();
+            $product_id = DB::table('orders')
+                ->join('products', 'products.id', '=', 'orders.product_id')
+                ->select('products.id',DB::raw('SUM(orders.qtu) AS sum'))
+                ->distinct()
+                ->whereMonth('orders.created_at', '=',  Carbon::now()->month)
+                ->groupBy('products.id')
+                ->limit(3)
+                ->orderBy('sum', 'desc')
+                ->pluck('id');
+            $purchases = DB::table('orders')
+                ->join('products', 'products.id', '=', 'orders.product_id')
+                ->select('products.name', DB::raw("to_date(cast(orders.created_at as text), 'YYYY MM DD') as date"),DB::raw('SUM(orders.qtu) AS sum'))
+                ->distinct()
+                // ->where('orders.created_at',  Carbon::now()->month)
+                ->whereMonth('orders.created_at', '=',  Carbon::now()->month)
+                ->whereIn('products.id',$product_id)
+                ->groupBy('date','products.name')
+                ->get();
 
-        $carts = Cart::where('created_at', '>', now()->subMonth())
-            ->get();
-        $x = collect($carts1)->groupBy(function ($item) {
-            return $item->created_at->format('Y-m-d');
-        });
-        $xx = collect($carts1)->groupBy('name');
-        $x2 = collect($x)->sortBy('name');
-        $total = $carts->sum('amount');
-        return ['report' => $x, 'r2' => $xx, 'total' => $total];
+            return $purchases;
+
+        } catch (\Exception $e) {
+            return Response()->json($e->getMessage(), 400);
+        }
+        return Response()->json('test done', 200);
     }
 
 

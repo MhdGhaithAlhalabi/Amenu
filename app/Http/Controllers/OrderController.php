@@ -362,7 +362,7 @@ public function t(){
 } catch (\Exception $e) {
 return Response()->json($e->getMessage(), 400);
 }
-return Response()->json('test done', 200);
+return Response()->json('daily report', 200);
 
 }
 public function del(){
