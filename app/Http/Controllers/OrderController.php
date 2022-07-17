@@ -365,11 +365,16 @@ return Response()->json('test done', 200);
 
 }
 public function del(){
-        $carts = Cart::all();
-        foreach ($carts as $cart)
-        {
-            $cart->delete();
-        }
+//        $carts = Cart::all();
+//        foreach ($carts as $cart)
+//        {
+//            $cart->delete();
+//        }
+    $customers = Customer::all();
+    foreach ($customers as $customer)
+    {
+        $customer->delete();
+    }
 }
     /**
      * Display the specified resource.
