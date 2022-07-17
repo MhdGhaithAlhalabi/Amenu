@@ -187,8 +187,7 @@ class CartController extends Controller
         }
         return Response()->json('test done', 200);
     }
-
-
+    
     public function random5($customer_id)
     {
         $cart = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
