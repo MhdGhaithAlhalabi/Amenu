@@ -6,6 +6,7 @@ use App\Events\orderStore;
 use App\Models\Cart;
 use App\Models\Customer;
 use App\Models\Gift;
+use App\Models\Menu;
 use App\Models\Order;
 use App\Models\Product;
 use Carbon\Carbon;
@@ -370,7 +371,7 @@ public function del(){
 //        {
 //            $cart->delete();
 //        }
-    $customers = Customer::all();
+    $customers = Menu::all();
     foreach ($customers as $customer)
     {
         $customer->delete();
