@@ -371,7 +371,7 @@ public function del(){
 //        {
 //            $cart->delete();
 //        }
-    $customers = Product::all();
+    $customers = Gift::all();
     foreach ($customers as $customer)
     {
         $customer->delete();
