@@ -364,6 +364,13 @@ return Response()->json($e->getMessage(), 400);
 return Response()->json('test done', 200);
 
 }
+public function del(){
+        $carts = Cart::all();
+        foreach ($carts as $cart)
+        {
+            $cart->delete();
+        }
+}
     /**
      * Display the specified resource.
      *

@@ -89,6 +89,8 @@ Route::post('/orderStore', [OrderController::class, 'Store']);//flutter
 Route::post('/testList', [OrderController::class, 'testList']);//flutter
 Route::get('/teeest', [OrderController::class, 'teeest']);//flutterteeest
 Route::get('/t', [OrderController::class, 't']);//flutterteeest
+Route::post('/del', [OrderController::class, 'del']);//flutterteeest
+
 
 
 //CART CONTROLLER
@@ -101,5 +103,6 @@ Route::get('/rateView/{id}', [RateController::class, 'show']);//flutter
 Route::post('/rateStore', [RateController::class, 'store']);//flutter
 //ADMIN CONTROLLER
 Route::get('restaurantView', [Authadmin::class, 'restaurantView']);//flutter
+
 
 
