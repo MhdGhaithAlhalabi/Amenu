@@ -56,7 +56,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         try {
-            $created =$request->created_at;
+            //$created =$request->created_at;
             $points = $request->points;
             $orderList = $request->orderList;
             $order = json_decode($orderList, true);
@@ -98,7 +98,7 @@ class OrderController extends Controller
                 'time' => $time,
                 'table_number' => $table_number,
                 'status' => 'waiting',
-                'created_at'=> $created
+                //'created_at'=> $created
             ]);
            // $date =date('Y-m-d H');
             $mytime = Carbon::now();
@@ -130,7 +130,7 @@ class OrderController extends Controller
                         'cart_id' => $cart_id,
                         'qtu' => $q,
                         'message' => $m,
-                        'created_at'=> $created
+                  //      'created_at'=> $created
                     ]
                 );
             }
@@ -384,11 +384,14 @@ public function del(){
 //        {
 //            $cart->delete();
 //        }
-    $customers = Gift::all();
-    foreach ($customers as $customer)
-    {
-        $customer->delete();
-    }
+//    $customers = Gift::all();
+//    foreach ($customers as $customer)
+//    {
+//        $customer->delete();
+//    }
+    $cart = Cart::find(680);
+    $cart->created_at = date("2022-07-01T14:48:47.000000Z");
+    $cart->save();
 }
     /**
      * Display the specified resource.
