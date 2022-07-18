@@ -97,7 +97,7 @@ class OrderController extends Controller
                 'table_number' => $table_number,
                 'status' => 'waiting'
             ]);
-            $text = 'new order';
+            $text = 'new order'+time();
             event(new orderStore($text));
             if ($amount > 100000) {
                 $customer = Customer::find($customer_id);
