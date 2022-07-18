@@ -98,7 +98,7 @@ class OrderController extends Controller
                 'status' => 'waiting'
             ]);
            // $date =date('Y-m-d H');
-            $mytime = Carbon\Carbon::now();
+            $mytime = Carbon::now();
             $date= $mytime->toDateTimeString();
             $tt = 'new order';
             $text = $tt + $date;
