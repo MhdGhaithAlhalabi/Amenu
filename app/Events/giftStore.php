@@ -19,10 +19,10 @@ class giftStore implements ShouldBroadcast
      *
      * @return void
      */
-    public $text2;
-    public function __construct($text2)
+    public $text;
+    public function __construct($text)
     {
-        $this->text2 = $text2;
+        $this->text = $text;
     }
 
     /**
