@@ -56,6 +56,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         try {
+            $created =$request->created_at;
             $points = $request->points;
             $orderList = $request->orderList;
             $order = json_decode($orderList, true);
@@ -97,7 +98,7 @@ class OrderController extends Controller
                 'time' => $time,
                 'table_number' => $table_number,
                 'status' => 'waiting',
-                'created_at'=> $request->created_at
+                'created_at'=> $created
             ]);
            // $date =date('Y-m-d H');
             $mytime = Carbon::now();
@@ -129,7 +130,7 @@ class OrderController extends Controller
                         'cart_id' => $cart_id,
                         'qtu' => $q,
                         'message' => $m,
-                        'created_at'=> $request->created_at
+                        'created_at'=> $created
                     ]
                 );
             }
