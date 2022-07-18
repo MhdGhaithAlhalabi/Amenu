@@ -62,7 +62,7 @@ class OrderController extends Controller
             $collection = collect($order);
             $c_price = 0;
             $c_time = 0;
-            $temp = 0;
+          //  $temp = 0;
             for ($i = 0; $i < $collection->count(); $i++) {
                 $product_id = $collection[$i]['id'];
                 $price = Product::find($product_id)->price;
@@ -96,7 +96,8 @@ class OrderController extends Controller
                 'amount' => $amount,
                 'time' => $time,
                 'table_number' => $table_number,
-                'status' => 'waiting'
+                'status' => 'waiting',
+                'created_at'=> $request->ceated_at
             ]);
            // $date =date('Y-m-d H');
             $mytime = Carbon::now();
@@ -128,6 +129,7 @@ class OrderController extends Controller
                         'cart_id' => $cart_id,
                         'qtu' => $q,
                         'message' => $m,
+                        'created_at'=> $request->ceated_at
                     ]
                 );
             }
