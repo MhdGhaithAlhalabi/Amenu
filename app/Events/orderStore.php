@@ -32,7 +32,7 @@ class orderStore implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('touted-sand-284');
+        return new Channel('new-order');
     }
     public function broadcastAs(){
         return 'new order';
