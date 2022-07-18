@@ -378,7 +378,7 @@ return Response()->json($e->getMessage(), 400);
 return Response()->json('daily report', 200);
 
 }
-public function del(){
+public function del(Request $request){
 //        $carts = Cart::all();
 //        foreach ($carts as $cart)
 //        {
@@ -389,9 +389,15 @@ public function del(){
 //    {
 //        $customer->delete();
 //    }
-    $cart = Cart::find(680);
-    $cart->created_at = date("2022-07-01T14:48:47.000000Z");
-    $cart->save();
+    $id = $request->id;
+    $time = $request->created_at;
+    $cart = Cart::find($id);
+    $cart->update(['created_at' =>$time]);
+
+    $orders = Order::all()->whereIn('cart_id',$cart->id);
+    foreach ($orders as $order){
+        $order->update(['created_at' =>$time]);
+    }
 }
     /**
      * Display the specified resource.
