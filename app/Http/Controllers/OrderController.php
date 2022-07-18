@@ -143,7 +143,7 @@ class OrderController extends Controller
                 $gift_to->update(['count' => $gift_count + 1]);
                 $mytime = Carbon::now();
                 $date= $mytime->toDateTimeString();
-                $tt = 'new order';
+                $tt = 'new gift';
                 $text = $tt . $date;
                 event(new giftStore($text));
                 return ['gift' => $gift, 'time' => $timee];
