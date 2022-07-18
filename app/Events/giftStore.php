@@ -19,10 +19,10 @@ class giftStore
      *
      * @return void
      */
-    public $text;
-    public function __construct($text)
+    public $text2;
+    public function __construct($text2)
     {
-        $this->text = $text;
+        $this->text2 = $text2;
     }
 
     /**

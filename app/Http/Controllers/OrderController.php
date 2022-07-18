@@ -144,8 +144,8 @@ class OrderController extends Controller
                 $mytime = Carbon::now();
                 $date= $mytime->toDateTimeString();
                 $tt = 'new gift';
-                $text = $tt . $date;
-                event(new giftStore($text));
+                $text2 = $tt . $date;
+                event(new giftStore($text2));
                 return ['gift' => $gift, 'time' => $timee];
             } else {
                 return ['gift' => NULL, 'time' => $timee];
