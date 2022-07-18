@@ -97,7 +97,7 @@ class OrderController extends Controller
                 'time' => $time,
                 'table_number' => $table_number,
                 'status' => 'waiting',
-                'created_at'=> $request->ceated_at
+                'created_at'=> $request->created_at
             ]);
            // $date =date('Y-m-d H');
             $mytime = Carbon::now();
@@ -129,7 +129,7 @@ class OrderController extends Controller
                         'cart_id' => $cart_id,
                         'qtu' => $q,
                         'message' => $m,
-                        'created_at'=> $request->ceated_at
+                        'created_at'=> $request->created_at
                     ]
                 );
             }
