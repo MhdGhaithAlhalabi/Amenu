@@ -101,7 +101,7 @@ class OrderController extends Controller
             $mytime = Carbon::now();
             $date= $mytime->toDateTimeString();
             $tt = 'new order';
-            $text = $tt + $date;
+            $text = $tt . $date;
             ;
             event(new orderStore($text));
             if ($amount > 100000) {
