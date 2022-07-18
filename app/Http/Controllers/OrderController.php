@@ -97,7 +97,12 @@ class OrderController extends Controller
                 'table_number' => $table_number,
                 'status' => 'waiting'
             ]);
-            $text = 'new order'+time();
+           // $date =date('Y-m-d H');
+            $mytime = Carbon\Carbon::now();
+            $date= $mytime->toDateTimeString();
+            $tt = 'new order';
+            $text = $tt + $date;
+            ;
             event(new orderStore($text));
             if ($amount > 100000) {
                 $customer = Customer::find($customer_id);
