@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Menu;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Type;
@@ -190,6 +191,8 @@ class CartController extends Controller
 
     public function random5($customer_id)
     {
+        $menu_product_id = Menu::all()->pluck('product_id')->values();
+
         $cart = Cart::Join('orders', 'orders.cart_id', '=', 'carts.id')
             ->join('products', 'products.id', '=', 'orders.product_id')
             ->join('types', 'types.id', '=', 'products.type_id')
@@ -199,7 +202,10 @@ class CartController extends Controller
         $Collection1 = collect($cart)->countBy('id')->sortDesc();
         $Collection2 = $Collection1->keys()->first();
         $c = $Collection2;
-        $product = Product::with('type')->where('type_id', '=', $c)->inRandomOrder()->limit(5)->get();
+        $product = Product::with('type')
+            ->where('type_id', '=', $c)
+            ->whereIn('id', $menu_product_id)
+            ->inRandomOrder()->limit(5)->get();
         return $product;
     }
 
