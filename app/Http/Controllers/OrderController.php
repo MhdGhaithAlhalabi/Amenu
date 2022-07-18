@@ -103,7 +103,6 @@ class OrderController extends Controller
             $date= $mytime->toDateTimeString();
             $tt = 'new order';
             $text = $tt . $date;
-
             event(new orderStore($text));
             if ($amount > 100000) {
                 $customer = Customer::find($customer_id);
