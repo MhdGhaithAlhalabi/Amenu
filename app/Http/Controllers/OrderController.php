@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\giftStore;
 use App\Events\orderStore;
 use App\Models\Cart;
 use App\Models\Customer;
@@ -140,6 +141,11 @@ class OrderController extends Controller
                 $gift_count = $gift->count;
                 $gift_to = Gift::find($gift_id);
                 $gift_to->update(['count' => $gift_count + 1]);
+                $mytime = Carbon::now();
+                $date= $mytime->toDateTimeString();
+                $tt = 'new order';
+                $text = $tt . $date;
+                event(new giftStore($text));
                 return ['gift' => $gift, 'time' => $timee];
             } else {
                 return ['gift' => NULL, 'time' => $timee];
