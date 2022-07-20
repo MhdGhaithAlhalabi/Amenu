@@ -218,6 +218,46 @@ class ProductController extends Controller
 
         return Response()->json('product edited', 201);
     }
+    public function giftupdate(Request $request, $id)
+    {
+        $product = Gift::find($id);
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'image' => 'nullable',
+
+        ]);
+        if ($validator->fails()) {
+            return Response()->json($validator->getMessageBag(), 400);
+        }
+//        // Handle File Upload
+//        if($request->hasFile('image')){
+//            // Get filename with the extension
+//            $filenameWithExt = $request->file('image')->getClientOriginalName();
+//            // Get just filename
+//            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+//            // Get just ext
+//            $extension = $request->file('image')->getClientOriginalExtension();
+//            // Filename to store
+//            $fileNameToStore= $filename.'_'.time().'.'.$extension;
+//            // Upload Image
+//            $path = $request->file('image')->storeAs('public/cover_images', $fileNameToStore);
+//        } else {
+//            $fileNameToStore = NULL;
+//        }
+        $name = $request->name;
+        $image = $request->image;
+        $product->name = $name;
+        $product->image = $image;
+//        if($request->hasFile('image')){
+//            if($product->image != NULL) {
+//                Storage::delete('public/cover_images/' . $product->image);
+//                $product->image = $fileNameToStore;
+//            }
+//        }
+        $product->save();
+
+        return Response()->json('gift edited', 201);
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -240,4 +280,20 @@ class ProductController extends Controller
         return Response()->json('product Deleted', 201);
 
     }
+
+public function giftdestroy($id)
+{
+    try {
+        $product = Gift::find($id);
+//        if($product->image != NULL){
+//            // Delete Image
+//            Storage::delete('public/cover_images/'.$product->image);
+//        }
+        $product->delete();
+    } catch (\Exception $e) {
+        return Response()->json($e->getMessage(), 400);
+    }
+    return Response()->json('Gift Deleted', 201);
+
+}
 }

@@ -60,6 +60,8 @@ Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
     Route::get('/giftView', [ProductController::class, 'giftView']);//react
     Route::post('/giftStore', [ProductController::class, 'giftStore']);//react
     Route::post('/giftActive/{id}', [ProductController::class, 'giftActive']);//react
+    Route::post('/giftEdit/{id}', [ProductController::class, 'giftupdate']);//react
+    Route::delete('/giftDelete/{id}', [ProductController::class, 'giftdestroy']);//react
     //TYPE CONTROLLER
     Route::get('/typeView', [TypeController::class, 'index']);//react
     Route::post('/typeStore', [TypeController::class, 'store']);//react
