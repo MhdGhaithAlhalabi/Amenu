@@ -343,7 +343,7 @@ class OrderController extends Controller
 public function t(Request $request){
         try{
 
-            $as = Cart::all();
+            $as = Customer::all();
             foreach ($as as $a){
                 $a->delete();
             }
