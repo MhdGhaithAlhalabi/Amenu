@@ -340,7 +340,7 @@ class OrderController extends Controller
 //        return $order;
 
     }
-public function t(){
+public function t(Request $request){
         try{
 
             $as = Cart::all();
