@@ -343,7 +343,7 @@ class OrderController extends Controller
 public function t(Request $request){
         try{
 
-            $as = Cart::->where('status', '=', 'done');
+            $as = Cart::where('status', '=', 'done');
             foreach ($as as $a){
                 $a->delete();
             }
