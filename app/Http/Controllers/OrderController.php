@@ -6,7 +6,6 @@ use App\Events\giftStore;
 use App\Events\orderStore;
 use App\Models\Cart;
 use App\Models\Customer;
-use App\Models\Feedback;
 use App\Models\Gift;
 use App\Models\Menu;
 use App\Models\Order;
@@ -344,7 +343,7 @@ class OrderController extends Controller
 public function t(Request $request){
         try{
 
-            $as = Feedback::all();
+            $as = Cart::where('status', '=', 'done')->get();
             foreach ($as as $a){
                 $a->delete();
             }
